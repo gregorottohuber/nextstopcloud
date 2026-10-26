@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nextstopcloud // terminal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="crt">
+    <div class="scanline"></div>
+    <div class="terminal-container">
+        <!-- Header -->
+        <header class="terminal-header">
+            <div class="sys-info">
+                <span>SYS_UPTIME: 99.98%</span>
+                <span>LOC: DE-FRA</span>
+                <span>SEC_LEVEL: SOVEREIGN</span>
+            </div>
+            <pre class="ascii-art">
+ _  _ ____ _  _ ___ ____ ___ ____ ___  ____ _    ____ _  _ ___  
+ |\ | |___  \/   |  [__   |  |  | |__] |    |    |  | |  | |  \ 
+ | \| |___ _/\_  |  ___]  |  |__| |    |___ |___ |__| |__| |__/ 
+            </pre>
+            <div class="prompt-line">
+                <span class="prompt">guest@nextstopcloud:~$</span>
+                <span class="typing-effect" id="typed-text"></span>
+                <span class="cursor">█</span>
+            </div>
+        </header>
+
+        <!-- Filter Navigation -->
+        <nav class="tag-filter">
+            <span class="filter-label">FILTER_TAGS:</span>
+            <button class="tag-btn active" data-tag="all">[ALL]</button>
+            <button class="tag-btn" data-tag="cloud">[#cloud]</button>
+            <button class="tag-btn" data-tag="architecture">[#architecture]</button>
+            <button class="tag-btn" data-tag="security">[#security]</button>
+            <button class="tag-btn" data-tag="kubernetes">[#kubernetes]</button>
+        </nav>
+
+        <!-- Main Content / Posts -->
+        <main class="posts-grid" id="posts-container">
+            <!-- Article 1 -->
+            <article class="post-card" data-tags="cloud architecture security">
+                <div class="post-meta">
+                    <span class="log-level">[INFO]</span>
+                    <span class="post-date">2026-10-24</span>
+                </div>
+                <h2 class="post-title"><a href="#">Architecting Sovereign Cloud Platforms in Regulated Environments</a></h2>
+                <p class="post-excerpt">Deep dive into landing zones, confidential computing, and cryptographic isolation patterns for mission-critical enterprise workloads.</p>
+                <div class="post-tags">
+                    <span class="tag">#cloud</span>
+                    <span class="tag">#architecture</span>
+                    <span class="tag">#security</span>
+                </div>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="post-card" data-tags="kubernetes cloud">
+                <div class="post-meta">
+                    <span class="log-level">[WARN]</span>
+                    <span class="post-date">2026-10-18</span>
+                </div>
+                <h2 class="post-title"><a href="#">Zero-Trust Networking in Multi-Tenant Kubernetes</a></h2>
+                <p class="post-excerpt">Evaluating eBPF-based network policies vs service mesh overhead when scaling microservices across hybrid landing zones.</p>
+                <div class="post-tags">
+                    <span class="tag">#kubernetes</span>
+                    <span class="tag">#cloud</span>
+                </div>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="post-card" data-tags="architecture security">
+                <div class="post-meta">
+                    <span class="log-level">[DEBUG]</span>
+                    <span class="post-date">2026-10-05</span>
+                </div>
+                <h2 class="post-title"><a href="#">Infrastructure as Code: Hardening Terraform Modules</a></h2>
+                <p class="post-excerpt">Automating compliance checks, policy-as-code enforcement, and state encryption in enterprise CI/CD pipelines.</p>
+                <div class="post-tags">
+                    <span class="tag">#architecture</span>
+                    <span class="tag">#security</span>
+                </div>
+            </article>
+        </main>
+
+        <!-- Interactive Terminal Widget -->
+        <section class="interactive-terminal">
+            <div class="terminal-bar">
+                <span class="terminal-title">cli_shell_v2.4.1</span>
+            </div>
+            <div class="terminal-body" id="cli-output">
+                <p>Type <span class="highlight">'help'</span> for available commands, <span class="highlight">'ls'</span> to list posts, or <span class="highlight">'matrix'</span> for a surprise.</p>
+            </div>
+            <div class="cli-input-line">
+                <span class="prompt">root@nextstopcloud:~#</span>
+                <input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false">
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="terminal-footer">
+            <p>&copy; 2026 nextstopcloud.com // All systems nominal.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
