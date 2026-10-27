@@ -202,10 +202,10 @@
             </div>
         </section>
 
-        <!-- 2. Interactive Terminal Shell (Moved UP right after Projects) -->
+        <!-- 2. Interactive Terminal Shell -->
         <section class="interactive-terminal">
             <div class="terminal-bar"><span class="terminal-title">cli_shell_v2.4.1</span><span>STATUS: ONLINE</span></div>
-            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'ls'</span> to list logs, or <span class="highlight">'cat 1'</span> to read article 1.</p></div>
+            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'ls'</span> to list logs, <span class="highlight">'cat 1'</span> to read article 1, or <span class="highlight">'linkedin'</span> to open profile.</p></div>
             <div class="cli-input-line"><span class="prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
         </section>
 
@@ -493,6 +493,14 @@
 
             const cliInput = document.getElementById("cli-input");
             const cliOutput = document.getElementById("cli-output");
+
+            const commands = {
+                help: "Available commands:<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article by number<br>- <span class='highlight'>linkedin</span>: Open LinkedIn profile<br>- <span class='highlight'>status</span>: Show system metrics<br>- <span class='highlight'>clear</span>: Clear terminal screen",
+                ls: "0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)",
+                linkedin: "Redirecting to https://www.linkedin.com/in/gregor-otto-huber ...",
+                status: "SYSTEM: NEXTSTOPCLOUD_NODE_01<br>REGION: GERMANY_WEST_CENTRAL (FRANKFURT)<br>SOVEREIGNTY: ENFORCED<br>UPTIME: 99.98%"
+            };
+
             cliInput.addEventListener("keydown", (e) => {
                 if (e.key === "Enter") {
                     const input = cliInput.value.trim().toLowerCase();
@@ -501,18 +509,26 @@
                     p.innerHTML = `<span class="prompt">root@nextstopcloud:~#</span> ${input}`;
                     cliOutput.appendChild(p);
                     const response = document.createElement("p");
-                    if (input === "clear") cliOutput.innerHTML = "";
-                    else if (input.startsWith("cat ")) {
+
+                    if (input === "clear") {
+                        cliOutput.innerHTML = "";
+                    } else if (input.startsWith("cat ")) {
                         const num = input.split(" ")[1];
                         const map = {"1":"sovereign-cloud", "2":"keyvault-powerplatform", "3":"landing-zones", "4":"confidential-computing"};
                         if(map[num]) { openArticle(map[num]); response.innerHTML = `Opening article 0x0${num} ...`; }
                         else { response.innerHTML = "Article not found."; }
                         cliOutput.appendChild(response);
-                    } else if (input === "ls") {
-                        response.innerHTML = "0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)";
+                    } else if (input === "linkedin") {
+                        response.innerHTML = commands.linkedin;
                         cliOutput.appendChild(response);
-                    } else if (input === "help") {
-                        response.innerHTML = "Commands: <span class='highlight'>ls</span>, <span class='highlight'>cat 1..4</span>, <span class='highlight'>clear</span>";
+                        setTimeout(() => {
+                            window.open("https://www.linkedin.com/in/gregor-otto-huber", "_blank");
+                        }, 800);
+                    } else if (commands[input]) {
+                        response.innerHTML = commands[input];
+                        cliOutput.appendChild(response);
+                    } else if (input !== "") {
+                        response.innerHTML = `Command not found: <span class="highlight">${input}</span>. Type 'help' for options.`;
                         cliOutput.appendChild(response);
                     }
                     cliOutput.scrollTop = cliOutput.scrollHeight;
