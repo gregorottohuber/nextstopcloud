@@ -128,7 +128,7 @@
         .post-tags { display: flex; gap: 8px; margin-top: 10px; }
         .tag { font-size: 0.75rem; color: var(--term-green-dim); }
         .click-hint { font-size: 0.78rem; color: var(--term-green-dim); text-align: right; margin-top: 8px; }
-        .interactive-terminal { border: 1px solid var(--term-green-dim); background-color: #05080c; margin-bottom: 20px; }
+        .interactive-terminal { border: 1px solid var(--term-green-dim); background-color: #05080c; margin-bottom: 30px; }
         .terminal-bar {
             background-color: var(--term-dark-green); padding: 6px 12px;
             font-size: 0.8rem; border-bottom: 1px solid var(--term-green-dim);
@@ -140,7 +140,6 @@
         .cli-input-line input { background: transparent; border: none; outline: none; color: var(--term-green); font-family: var(--font-stack); font-size: 0.9rem; flex-grow: 1; }
         .terminal-footer { text-align: center; font-size: 0.8rem; color: var(--term-green-dim); border-top: 1px dashed var(--term-green-dim); padding-top: 15px; }
 
-        /* Fixed Reader Modal & Box Framing */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(10, 14, 20, 0.96); z-index: 2000;
@@ -159,9 +158,7 @@
         }
         .close-btn { background: transparent; border: 1px solid var(--term-green); color: var(--term-green); padding: 6px 14px; font-family: var(--font-stack); cursor: pointer; }
         .close-btn:hover { background-color: var(--term-green); color: var(--bg-color); }
-        .article-content {
-            overflow-y: auto; padding-right: 15px; flex-grow: 1;
-        }
+        .article-content { overflow-y: auto; padding-right: 15px; flex-grow: 1; }
         .article-content h1 { color: var(--term-green); font-size: 1.5rem; margin-bottom: 15px; line-height: 1.3; }
         .article-content h2 { color: var(--term-green); font-size: 1.2rem; margin-top: 22px; margin-bottom: 10px; border-bottom: 1px solid var(--term-dark-green); padding-bottom: 5px; }
         .article-content p { margin-bottom: 16px; color: #d1d5db; font-size: 0.95rem; }
@@ -182,10 +179,13 @@
             </pre>
             <div class="prompt-line"><span class="prompt">guest@nextstopcloud:~$</span><span class="typing-effect" id="typed-text"></span><span class="cursor">█</span></div>
         </header>
+
         <div class="profile-bar">
             <span>AUTHOR: <strong>Gregor Otto Huber</strong></span>
             <a href="https://www.linkedin.com/in/gregor-otto-huber" target="_blank" class="profile-link">[LinkedIn Profile ↗]</a>
         </div>
+
+        <!-- 1. Case Studies / Projects Section -->
         <section class="case-studies-container">
             <div class="section-title">PROJECTS_CONTRIBUTED_TO // PUBLIC_CASE_STUDIES</div>
             <div class="case-study-card">
@@ -201,6 +201,15 @@
                 <a href="https://cloud.google.com/blog/products/serverless/how-dz-bank-uses-a-cloud-run-first-approach-to-unlock-big-savings?hl=en" target="_blank" class="ext-link-btn">[Read Blog ↗]</a>
             </div>
         </section>
+
+        <!-- 2. Interactive Terminal Shell (Moved UP right after Projects) -->
+        <section class="interactive-terminal">
+            <div class="terminal-bar"><span class="terminal-title">cli_shell_v2.4.1</span><span>STATUS: ONLINE</span></div>
+            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'ls'</span> to list logs, or <span class="highlight">'cat 1'</span> to read article 1.</p></div>
+            <div class="cli-input-line"><span class="prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
+        </section>
+
+        <!-- 3. Filter Navigation & Article List -->
         <nav class="tag-filter">
             <span class="filter-label">FILTER_TAGS:</span>
             <button class="tag-btn active" data-tag="all">[ALL]</button>
@@ -209,6 +218,7 @@
             <button class="tag-btn" data-tag="powerplatform">[#powerplatform]</button>
             <button class="tag-btn" data-tag="security">[#security]</button>
         </nav>
+
         <main class="posts-grid" id="posts-container">
             <article class="post-card" data-post-id="sovereign-cloud" data-tags="sovereignty azure security">
                 <div class="post-meta"><span class="log-level">[INFO] LOG_ID: 0x01</span><span class="post-date">2026-10-24</span></div>
@@ -239,19 +249,18 @@
                 <div class="click-hint">[Click to Read ↗]</div>
             </article>
         </main>
-        <section class="interactive-terminal">
-            <div class="terminal-bar"><span class="terminal-title">cli_shell_v2.4.1</span><span>STATUS: ONLINE</span></div>
-            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'ls'</span> to list logs, or <span class="highlight">'cat 1'</span> to read article 1.</p></div>
-            <div class="cli-input-line"><span class="prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
-        </section>
+
         <footer class="terminal-footer"><p>&copy; 2026 nextstopcloud.com // Gregor Otto Huber // All systems nominal.</p></footer>
     </div>
+
+    <!-- Reader Modal -->
     <div class="modal-overlay" id="reader-modal">
         <div class="modal-container">
             <div class="modal-header"><span>READER_SHELL_V1.0</span><button class="close-btn" id="close-modal">[ESC / CLOSE]</button></div>
             <div class="article-content" id="article-body"></div>
         </div>
     </div>
+
     <script>
         const articlesData = {
             "sovereign-cloud": `
