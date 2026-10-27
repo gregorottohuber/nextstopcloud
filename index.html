@@ -16,13 +16,7 @@
             --term-dark-green: #002b11;
             --font-stack: 'Fira Code', monospace;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: var(--bg-color);
             color: var(--term-green);
@@ -32,277 +26,171 @@
             display: flex;
             justify-content: center;
         }
-
         .scanline {
-            width: 100%;
-            height: 3px;
+            width: 100%; height: 3px;
             background: rgba(0, 255, 102, 0.08);
-            position: fixed;
-            top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             pointer-events: none;
             animation: scanline 6s linear infinite;
             z-index: 999;
         }
-
-        @keyframes scanline {
-            0% { top: 0%; }
-            100% { top: 100%; }
-        }
-
+        @keyframes scanline { 0% { top: 0%; } 100% { top: 100%; } }
         .terminal-container {
-            max-width: 900px;
-            width: 100%;
+            max-width: 920px; width: 100%;
             border: 1px solid var(--term-green-dim);
             padding: 25px;
             box-shadow: 0 0 25px var(--term-green-glow);
             background-color: rgba(10, 14, 20, 0.98);
         }
-
         .terminal-header {
             border-bottom: 1px dashed var(--term-green-dim);
-            padding-bottom: 20px;
-            margin-bottom: 25px;
+            padding-bottom: 20px; margin-bottom: 25px;
         }
-
         .sys-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: var(--term-green-dim);
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
+            display: flex; justify-content: space-between;
+            font-size: 0.8rem; color: var(--term-green-dim);
+            margin-bottom: 15px; flex-wrap: wrap; gap: 10px;
         }
-
         .ascii-art {
-            font-size: 0.62rem;
-            line-height: 1.2;
+            font-size: 0.62rem; line-height: 1.2;
             color: var(--term-green);
             text-shadow: 0 0 8px var(--term-green-glow);
-            overflow-x: auto;
-            margin-bottom: 15px;
+            overflow-x: auto; margin-bottom: 15px;
         }
-
-        .prompt-line {
-            font-size: 1.05rem;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .prompt {
-            color: var(--term-green-dim);
-            margin-right: 8px;
-        }
-
-        .cursor {
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
+        .prompt-line { font-size: 1.05rem; display: flex; align-items: center; flex-wrap: wrap; }
+        .prompt { color: var(--term-green-dim); margin-right: 8px; }
+        .cursor { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
         .profile-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             background-color: rgba(0, 43, 17, 0.3);
             border: 1px solid var(--term-dark-green);
-            padding: 10px 15px;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
+            padding: 12px 16px; margin-bottom: 25px; font-size: 0.88rem;
         }
-
         .profile-link {
-            color: #fff;
-            text-decoration: none;
+            color: #fff; text-decoration: none;
             border: 1px solid var(--term-green-dim);
-            padding: 4px 10px;
-            transition: all 0.2s ease;
+            padding: 4px 10px; transition: all 0.2s ease;
         }
-
         .profile-link:hover {
-            background-color: var(--term-green);
-            color: var(--bg-color);
+            background-color: var(--term-green); color: var(--bg-color);
             box-shadow: 0 0 10px var(--term-green-glow);
         }
-
-        .tag-filter {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
+        .section-title {
+            font-size: 0.95rem; color: var(--term-green-dim);
+            margin-bottom: 12px; border-bottom: 1px solid var(--term-dark-green);
+            padding-bottom: 4px;
         }
-
-        .filter-label {
-            font-size: 0.85rem;
-            color: var(--term-green-dim);
+        .case-studies-container { margin-bottom: 30px; }
+        .case-study-card {
+            border: 1px dashed var(--term-green-dim);
+            padding: 14px; margin-bottom: 12px;
+            background-color: rgba(0, 255, 102, 0.02);
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px; transition: all 0.2s ease;
         }
-
-        .tag-btn {
-            background: transparent;
+        .case-study-card:hover {
+            border-style: solid; background-color: rgba(0, 43, 17, 0.25);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.1);
+        }
+        .case-study-info { flex: 1; min-width: 250px; }
+        .case-study-title { color: var(--term-green); font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+        .case-study-desc { font-size: 0.8rem; color: #a3e6be; }
+        .ext-link-btn {
+            color: var(--term-green); text-decoration: none;
             border: 1px solid var(--term-green-dim);
-            color: var(--term-green-dim);
-            padding: 5px 10px;
-            font-family: var(--font-stack);
-            cursor: pointer;
-            transition: all 0.2s ease;
+            padding: 4px 8px; font-size: 0.78rem; white-space: nowrap;
         }
-
+        .ext-link-btn:hover { background-color: var(--term-green); color: var(--bg-color); }
+        .tag-filter { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .filter-label { font-size: 0.85rem; color: var(--term-green-dim); }
+        .tag-btn {
+            background: transparent; border: 1px solid var(--term-green-dim);
+            color: var(--term-green-dim); padding: 5px 10px;
+            font-family: var(--font-stack); cursor: pointer; transition: all 0.2s ease;
+        }
         .tag-btn:hover, .tag-btn.active {
-            background-color: var(--term-green);
-            color: var(--bg-color);
+            background-color: var(--term-green); color: var(--bg-color);
             box-shadow: 0 0 10px var(--term-green-glow);
         }
-
-        .posts-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
+        .posts-grid { display: flex; flex-direction: column; gap: 20px; margin-bottom: 30px; }
         .post-card {
-            border: 1px solid var(--term-dark-green);
-            padding: 18px;
-            background-color: rgba(0, 43, 17, 0.15);
+            border: 1px solid var(--term-dark-green); padding: 18px;
+            background-color: rgba(0, 43, 17, 0.15); cursor: pointer;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-
-        .post-card:hover {
-            border-color: var(--term-green);
-            box-shadow: 0 0 12px rgba(0, 255, 102, 0.15);
-        }
-
-        .post-meta {
-            font-size: 0.8rem;
-            color: var(--term-green-dim);
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .log-level {
-            font-weight: bold;
-        }
-
-        .post-title a {
-            color: var(--term-green);
-            text-decoration: none;
-            font-size: 1.15rem;
-            font-weight: 600;
-        }
-
-        .post-title a:hover {
-            text-decoration: underline;
-            text-shadow: 0 0 6px var(--term-green-glow);
-        }
-
-        .post-excerpt {
-            font-size: 0.9rem;
-            color: #a3e6be;
-            margin: 10px 0;
-            line-height: 1.5;
-        }
-
-        .post-tags {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .tag {
-            font-size: 0.75rem;
-            color: var(--term-green-dim);
-        }
-
-        .interactive-terminal {
-            border: 1px solid var(--term-green-dim);
-            background-color: #05080c;
-            margin-bottom: 20px;
-        }
-
+        .post-card:hover { border-color: var(--term-green); box-shadow: 0 0 12px rgba(0, 255, 102, 0.15); }
+        .post-meta { font-size: 0.8rem; color: var(--term-green-dim); margin-bottom: 8px; display: flex; justify-content: space-between; }
+        .log-level { font-weight: bold; }
+        .post-title { color: var(--term-green); font-size: 1.15rem; font-weight: 600; }
+        .post-card:hover .post-title { text-decoration: underline; text-shadow: 0 0 6px var(--term-green-glow); }
+        .post-excerpt { font-size: 0.9rem; color: #a3e6be; margin: 10px 0; line-height: 1.5; }
+        .post-tags { display: flex; gap: 8px; margin-top: 10px; }
+        .tag { font-size: 0.75rem; color: var(--term-green-dim); }
+        .click-hint { font-size: 0.78rem; color: var(--term-green-dim); text-align: right; margin-top: 8px; }
+        .interactive-terminal { border: 1px solid var(--term-green-dim); background-color: #05080c; margin-bottom: 20px; }
         .terminal-bar {
-            background-color: var(--term-dark-green);
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            border-bottom: 1px solid var(--term-green-dim);
-            display: flex;
-            justify-content: space-between;
+            background-color: var(--term-dark-green); padding: 6px 12px;
+            font-size: 0.8rem; border-bottom: 1px solid var(--term-green-dim);
+            display: flex; justify-content: space-between;
         }
-
-        .terminal-body {
-            padding: 15px;
-            min-height: 130px;
-            max-height: 220px;
-            overflow-y: auto;
-            font-size: 0.88rem;
-            line-height: 1.45;
+        .terminal-body { padding: 15px; min-height: 130px; max-height: 220px; overflow-y: auto; font-size: 0.88rem; line-height: 1.45; }
+        .highlight { color: #fff; font-weight: bold; }
+        .cli-input-line { display: flex; padding: 8px 15px; border-top: 1px dashed var(--term-dark-green); background-color: #05080c; }
+        .cli-input-line input { background: transparent; border: none; outline: none; color: var(--term-green); font-family: var(--font-stack); font-size: 0.9rem; flex-grow: 1; }
+        .terminal-footer { text-align: center; font-size: 0.8rem; color: var(--term-green-dim); border-top: 1px dashed var(--term-green-dim); padding-top: 15px; }
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(10, 14, 20, 0.96); z-index: 2000; overflow-y: auto;
+            padding: 30px 20px; justify-content: center;
         }
-
-        .highlight {
-            color: #fff;
-            font-weight: bold;
+        .modal-container {
+            max-width: 850px; width: 100%; background-color: #0a0e14;
+            border: 1px solid var(--term-green); box-shadow: 0 0 30px var(--term-green-glow);
+            padding: 30px; color: #d1d5db; line-height: 1.7;
         }
-
-        .cli-input-line {
-            display: flex;
-            padding: 8px 15px;
-            border-top: 1px dashed var(--term-dark-green);
-            background-color: #05080c;
-        }
-
-        .cli-input-line input {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--term-green);
-            font-family: var(--font-stack);
-            font-size: 0.9rem;
-            flex-grow: 1;
-        }
-
-        .terminal-footer {
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--term-green-dim);
-            border-top: 1px dashed var(--term-green-dim);
-            padding-top: 15px;
-        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--term-green-dim); padding-bottom: 15px; margin-bottom: 25px; }
+        .close-btn { background: transparent; border: 1px solid var(--term-green); color: var(--term-green); padding: 6px 14px; font-family: var(--font-stack); cursor: pointer; }
+        .close-btn:hover { background-color: var(--term-green); color: var(--bg-color); }
+        .article-content h1 { color: var(--term-green); font-size: 1.6rem; margin-bottom: 15px; line-height: 1.3; }
+        .article-content h2 { color: var(--term-green); font-size: 1.25rem; margin-top: 25px; margin-bottom: 12px; border-bottom: 1px solid var(--term-dark-green); padding-bottom: 5px; }
+        .article-content p { margin-bottom: 16px; color: #d1d5db; font-size: 0.95rem; }
+        .article-content ul { margin-bottom: 18px; padding-left: 25px; color: #d1d5db; }
+        .article-content li { margin-bottom: 8px; }
+        .article-content pre { background-color: #05080c; border: 1px solid var(--term-dark-green); padding: 15px; overflow-x: auto; color: var(--term-green); font-family: var(--font-stack); font-size: 0.85rem; margin: 20px 0; }
     </style>
 </head>
 <body class="crt">
     <div class="scanline"></div>
     <div class="terminal-container">
-        <!-- Header -->
         <header class="terminal-header">
-            <div class="sys-info">
-                <span>SYS_UPTIME: 99.98%</span>
-                <span>LOC: DE-FRA</span>
-                <span>SEC_LEVEL: SOVEREIGN</span>
-            </div>
+            <div class="sys-info"><span>SYS_UPTIME: 99.98%</span><span>LOC: DE-FRA</span><span>SEC_LEVEL: SOVEREIGN</span></div>
             <pre class="ascii-art">
  _  _ ____ _  _ ___ ____ ___ ____ ___  ____ _    ____ _  _ ___  
  |\ | |___  \/   |  [__   |  |  | |__] |    |    |  | |  | |  \ 
  | \| |___ _/\_  |  ___]  |  |__| |    |___ |___ |__| |__| |__/ 
             </pre>
-            <div class="prompt-line">
-                <span class="prompt">guest@nextstopcloud:~$</span>
-                <span class="typing-effect" id="typed-text"></span>
-                <span class="cursor">█</span>
-            </div>
+            <div class="prompt-line"><span class="prompt">guest@nextstopcloud:~$</span><span class="typing-effect" id="typed-text"></span><span class="cursor">█</span></div>
         </header>
-
-        <!-- Profile Bar -->
         <div class="profile-bar">
             <span>AUTHOR: <strong>Gregor Otto Huber</strong></span>
             <a href="https://www.linkedin.com/in/gregor-otto-huber" target="_blank" class="profile-link">[LinkedIn Profile ↗]</a>
         </div>
-
-        <!-- Filter Navigation -->
+        <section class="case-studies-container">
+            <div class="section-title">FEATURED_PROJECTS // PUBLIC_CASE_STUDIES</div>
+            <div class="case-study-card">
+                <div class="case-study-info"><div class="case-study-title">Google Cloud Workstations @ DZ BANK</div><div class="case-study-desc">Improving developer productivity & security with cloud-hosted environments.</div></div>
+                <a href="https://cloud.google.com/blog/products/application-modernization/dz-bank-improves-developer-productivity-with-cloud-workstations?hl=en" target="_blank" class="ext-link-btn">[Read Blog ↗]</a>
+            </div>
+            <div class="case-study-card">
+                <div class="case-study-info"><div class="case-study-title">Google Cloud Customer Story: DZ BANK</div><div class="case-study-desc">Enterprise modern cloud platform architecture and digital transformation.</div></div>
+                <a href="https://cloud.google.com/customers/dzbank?hl=de" target="_blank" class="ext-link-btn">[Read Story ↗]</a>
+            </div>
+            <div class="case-study-card">
+                <div class="case-study-info"><div class="case-study-title">Cloud Run First Approach @ DZ BANK</div><div class="case-study-desc">Unlocking big savings and scalability using serverless architecture patterns.</div></div>
+                <a href="https://cloud.google.com/blog/products/serverless/how-dz-bank-uses-a-cloud-run-first-approach-to-unlock-big-savings?hl=en" target="_blank" class="ext-link-btn">[Read Blog ↗]</a>
+            </div>
+        </section>
         <nav class="tag-filter">
             <span class="filter-label">FILTER_TAGS:</span>
             <button class="tag-btn active" data-tag="all">[ALL]</button>
@@ -311,164 +199,303 @@
             <button class="tag-btn" data-tag="powerplatform">[#powerplatform]</button>
             <button class="tag-btn" data-tag="security">[#security]</button>
         </nav>
-
-        <!-- Posts Grid -->
         <main class="posts-grid" id="posts-container">
-            <!-- Article 1 -->
-            <article class="post-card" data-tags="sovereignty azure security">
-                <div class="post-meta">
-                    <span class="log-level">[INFO] LOG_ID: 0x01</span>
-                    <span class="post-date">2026-10-24</span>
-                </div>
-                <h2 class="post-title"><a href="#">Microsoft Sovereign Cloud in Deutschland: Architektur, Compliance & Delos Cloud</a></h2>
-                <p class="post-excerpt">Analyse der Microsoft Cloud-Strategie für den öffentlichen Sektor und regulierte Branchen in Deutschland. Ein Blick auf Datenresidenz, vertrauliche Datenverarbeitung (Confidential Computing) und die Rolle von Delos Cloud für die digitale Souveränität.</p>
-                <div class="post-tags">
-                    <span class="tag">#sovereignty</span>
-                    <span class="tag">#azure</span>
-                    <span class="tag">#security</span>
-                </div>
+            <article class="post-card" data-post-id="sovereign-cloud" data-tags="sovereignty azure security">
+                <div class="post-meta"><span class="log-level">[INFO] LOG_ID: 0x01</span><span class="post-date">2026-10-24</span></div>
+                <h2 class="post-title">Microsoft Sovereign Cloud in Deutschland: Architektur, Compliance & Delos Cloud</h2>
+                <p class="post-excerpt">Analyse der Microsoft Cloud-Strategie für den öffentlichen Sektor und regulierte Branchen in Deutschland. Ein Blick auf Datenresidenz, vertrauliche Datenverarbeitung (Confidential Computing) und Delos Cloud.</p>
+                <div class="post-tags"><span class="tag">#sovereignty</span> <span class="tag">#azure</span> <span class="tag">#security</span></div>
+                <div class="click-hint">[Klicken zum Lesen ↗]</div>
             </article>
-
-            <!-- Article 2 -->
-            <article class="post-card" data-tags="azure powerplatform security">
-                <div class="post-meta">
-                    <span class="log-level">[INFO] LOG_ID: 0x02</span>
-                    <span class="post-date">2026-10-18</span>
-                </div>
-                <h2 class="post-title"><a href="#">Azure Key Vault Integration in Microsoft Power Platform: Enterprise Secrets Management</a></h2>
-                <p class="post-excerpt">Sicheres Verwalten von Verbindungsschlüsseln und Zertifikaten in Power Apps & Power Automate. Wie Umgebungsvariablen in Kombination mit dem Azure Key Vault unberechtigte Zugriffe in Low-Code-Anwendungen verhindern.</p>
-                <div class="post-tags">
-                    <span class="tag">#azure</span>
-                    <span class="tag">#powerplatform</span>
-                    <span class="tag">#security</span>
-                </div>
+            <article class="post-card" data-post-id="keyvault-powerplatform" data-tags="azure powerplatform security">
+                <div class="post-meta"><span class="log-level">[INFO] LOG_ID: 0x02</span><span class="post-date">2026-10-18</span></div>
+                <h2 class="post-title">Azure Key Vault Integration in Microsoft Power Platform: Enterprise Secrets Management</h2>
+                <p class="post-excerpt">Sicheres Verwalten von Verbindungsschlüsseln in Power Apps & Power Automate. Wie Umgebungsvariablen mit dem Azure Key Vault unberechtigte Zugriffe verhindern.</p>
+                <div class="post-tags"><span class="tag">#azure</span> <span class="tag">#powerplatform</span> <span class="tag">#security</span></div>
+                <div class="click-hint">[Klicken zum Lesen ↗]</div>
             </article>
-
-            <!-- Article 3 -->
-            <article class="post-card" data-tags="azure security">
-                <div class="post-meta">
-                    <span class="log-level">[DEBUG] LOG_ID: 0x03</span>
-                    <span class="post-date">2026-10-05</span>
-                </div>
-                <h2 class="post-title"><a href="#">Automated Azure Landing Zones & Policy-as-Code Frameworks</a></h2>
-                <p class="post-excerpt">Skalierbare Multi-Subscription-Umgebungen in Azure mit Terraform verwalten. Automatische Durchsetzung von Sicherheits-Standards und Guardrails über Azure Policy und GitHub Actions Pipelines.</p>
-                <div class="post-tags">
-                    <span class="tag">#azure</span>
-                    <span class="tag">#security</span>
-                </div>
+            <article class="post-card" data-post-id="landing-zones" data-tags="azure security">
+                <div class="post-meta"><span class="log-level">[DEBUG] LOG_ID: 0x03</span><span class="post-date">2026-10-05</span></div>
+                <h2 class="post-title">Automated Azure Landing Zones & Policy-as-Code Frameworks</h2>
+                <p class="post-excerpt">Skalierbare Multi-Subscription-Umgebungen in Azure mit Terraform verwalten. Automatische Durchsetzung von Sicherheits-Standards und Guardrails über Azure Policy.</p>
+                <div class="post-tags"><span class="tag">#azure</span> <span class="tag">#security</span></div>
+                <div class="click-hint">[Klicken zum Lesen ↗]</div>
             </article>
-
-            <!-- Article 4 -->
-            <article class="post-card" data-tags="sovereignty security">
-                <div class="post-meta">
-                    <span class="log-level">[WARN] LOG_ID: 0x04</span>
-                    <span class="post-date">2026-09-28</span>
-                </div>
-                <h2 class="post-title"><a href="#">Confidential Computing: Schutz von KI-Workloads und sensitiven Daten</a></h2>
-                <p class="post-excerpt">Wie hardwarebasierte Enklaven (AMD SEV-SNP, Intel SGX) Daten nicht nur in Ruhe und bei der Übertragung, sondern auch während der Verarbeitung im Arbeitsspeicher schützen.</p>
-                <div class="post-tags">
-                    <span class="tag">#sovereignty</span>
-                    <span class="tag">#security</span>
-                </div>
+            <article class="post-card" data-post-id="confidential-computing" data-tags="sovereignty security">
+                <div class="post-meta"><span class="log-level">[WARN] LOG_ID: 0x04</span><span class="post-date">2026-09-28</span></div>
+                <h2 class="post-title">Confidential Computing: Schutz von KI-Workloads und sensitiven Daten</h2>
+                <p class="post-excerpt">Wie hardwarebasierte Enklaven (AMD SEV-SNP, Intel SGX) Daten während der Verarbeitung im Arbeitsspeicher schützen.</p>
+                <div class="post-tags"><span class="tag">#sovereignty</span> <span class="tag">#security</span></div>
+                <div class="click-hint">[Klicken zum Lesen ↗]</div>
             </article>
         </main>
-
-        <!-- Interactive Terminal Widget -->
         <section class="interactive-terminal">
-            <div class="terminal-bar">
-                <span class="terminal-title">cli_shell_v2.4.1</span>
-                <span>STATUS: ONLINE</span>
-            </div>
-            <div class="terminal-body" id="cli-output">
-                <p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'ls'</span> to list logs, or <span class="highlight">'linkedin'</span> to open profile.</p>
-            </div>
-            <div class="cli-input-line">
-                <span class="prompt">root@nextstopcloud:~#</span>
-                <input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false">
-            </div>
+            <div class="terminal-bar"><span class="terminal-title">cli_shell_v2.4.1</span><span>STATUS: ONLINE</span></div>
+            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'ls'</span> to list logs, or <span class="highlight">'cat 1'</span> to read article 1.</p></div>
+            <div class="cli-input-line"><span class="prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
         </section>
-
-        <!-- Footer -->
-        <footer class="terminal-footer">
-            <p>&copy; 2026 nextstopcloud.com // Gregor Otto Huber // All systems nominal.</p>
-        </footer>
+        <footer class="terminal-footer"><p>&copy; 2026 nextstopcloud.com // Gregor Otto Huber // All systems nominal.</p></footer>
     </div>
-
+    <div class="modal-overlay" id="reader-modal">
+        <div class="modal-container">
+            <div class="modal-header"><span>READER_SHELL_V1.0</span><button class="close-btn" id="close-modal">[ESC / CLOSE]</button></div>
+            <div class="article-content" id="article-body"></div>
+        </div>
+    </div>
     <script>
+        const articlesData = {
+            "sovereign-cloud": `
+                <h1>Microsoft Sovereign Cloud in Deutschland: Architektur, Compliance & Delos Cloud</h1>
+                <p><strong>Autor:</strong> Gregor Otto Huber | <strong>Datum:</strong> 2026-10-24</p>
+                <hr style="border-color: #002b11; margin: 15px 0 25px 0;">
+                
+                <h2>Einleitung</h2>
+                <p>Die Anforderungen an die digitale Souveränität des öffentlichen Sektors und stark regulierter Branchen (Banken, Versicherungswesen, Gesundheitswesen) in Deutschland haben sich in den letzten Jahren drastisch verschärft. Mit dem Vormarsch von Cloud-Native-Architekturen und KI-Workloads stehen IT-Entscheider vor dem klassischen Zielkonflikt: Wie lässt sich die Innovationsgeschwindigkeit hyperskalierbarer Cloud-Plattformen nutzen, ohne die Kontrolle über sensible Daten, kryptografische Schlüssel und rechtliche Zugriffsrisiken abzugeben?</p>
+                <p>Microsoft begegnet dieser Herausforderung in Deutschland mit einer mehrschichtigen Souveränitätsstrategie, deren Speerspitze die <strong>Microsoft Cloud for Sovereignty</strong> sowie das Ökosystem rund um die <strong>Delos Cloud</strong> bildet.</p>
+
+                <h2>1. Die Säulen der Microsoft Cloud for Sovereignty</h2>
+                <p>Die Microsoft Cloud for Sovereignty ist kein separates, physisch isoliertes Rechenzentrum, sondern eine Architektur- und Governance-Schicht, die auf bestehenden Azure-Regionen (wie <em>Germany West Central</em> in Frankfurt) aufbaut. Sie basiert auf drei zentralen Pfeilern:</p>
+                <ul>
+                    <li><strong>Souveräne Guardrails & Landing Zones:</strong> Über spezialisierte <em>Sovereign Landing Zone (SLZ)</em> Templates werden Azure Policy-Initiativen automatisiert ausgerollt. Diese verhindern präventiv, dass Daten Regionen außerhalb Deutschlands/der EU verlassen oder nicht-konforme Dienste bereitgestellt werden.</li>
+                    <li><strong>Transparenz und operative Kontrolle:</strong> Kunden erhalten tiefen Einblick in den Betrieb der Infrastruktur. Dazu gehören Customer Lockbox (manuelle Freigabe, falls ein Microsoft-Ingenieur für Supportzwecke temporären Zugriff benötigt) und privilegierte Zugriffskontrollen.</li>
+                    <li><strong>Kryptografische Souveränität:</strong> Über <em>Double Key Encryption (DKE)</em> oder <em>Customer-Managed Keys (CMK)</em> behält der Kunde die alleinige Kontrolle über die Schlüssel. Selbst wenn Microsoft rechtlich zur Herausgabe von Daten gezwungen würde, blieben diese ohne den beim Kunden liegenden Schlüssel unlesbar.</li>
+                </ul>
+
+                <h2>2. Delos Cloud: Die souveräne Plattform für die öffentliche Verwaltung</h2>
+                <p>Ein essenzieller Baustein für den deutschen Bundes-, Landes- und Kommunalsektor ist die <strong>Delos Cloud</strong>. Als deutscher IT-Dienstleister betreibt Delos Cloud eine vollständig souveräne Microsoft-Cloud-Plattform für die öffentliche Verwaltung in Deutschland.</p>
+                <ul>
+                    <li><strong>Betriebshoheit:</strong> Der Betrieb erfolgt durch Personal mit Sicherheitsüberprüfung vor Ort in Deutschland.</li>
+                    <li><strong>Geheimschutz & BSI-Compliance:</strong> Die Infrastruktur ist darauf ausgelegt, die strengen Vorgaben des Bundesamtes für Sicherheit in der Informationstechnik (BSI) sowie IT-Grundschutz und Geheimschutzstandards zu erfüllen.</li>
+                    <li><strong>Neuartiges Partner-Modell:</strong> Delos Cloud nutzt die IP und Technologie von Microsoft, fungiert aber als rechtlich und operativ unabhängiger Betreiber.</li>
+                </ul>
+
+                <h2>3. Technische Umsetzung: Confidential Computing</h2>
+                <p>Das technische Fundament für echte Datensouveränität in der Cloud bildet <strong>Confidential Computing</strong>. Während Verschlüsselung <em>at rest</em> (AES-256) und <em>in transit</em> (TLS 1.3) längst Standard sind, schützt Confidential Computing Daten <strong>in use</strong> – also während sie im Arbeitsspeicher verarbeitet werden.</p>
+                <p>Durch hardwarebasierte Trusted Execution Environments (TEEs) wie <strong>AMD SEV-SNP</strong> oder <strong>Intel SGX</strong> werden Speicherbereiche kryptografisch isoliert. Weder das Host-Betriebssystem noch der Hypervisor von Azure oder ein Administrator haben Einblick in den Klartext-Arbeitsspeicher der virtuellen Maschine.</p>
+
+<pre>+------------------------------------------------------------------+
+|                   Anwendungs-Code & Sensitive Daten              |
+|                   (In kryptografisch isolierter Enklave)        |
++------------------------------------------------------------------+
+                                  |
+            [ Hardware-Verschlüsselung im RAM (AMD SEV) ]
+                                  v
++------------------------------------------------------------------+
+|          Untrusted Host / Azure Hypervisor / OS Administrator    |
+|                     (Kein Zugriff auf Klartext)                  |
++------------------------------------------------------------------+</pre>
+
+                <h2>Fazit & Ausblick</h2>
+                <p>Souveränität in der Cloud ist kein binärer Zustand, sondern ein Spektrum. Unternehmen und Behörden müssen für jede Anwendung den passenden Mix aus Compliance, Kosten und Funktionalität wählen. Mit der Kombination aus BSI-konformen Azure Landing Zones, Confidential Computing und Partner-Modellen wie der Delos Cloud zeigt sich, dass höchste Sicherheitsanforderungen und moderne Cloud-Architekturen in Deutschland kein Widerspruch mehr sein müssen.</p>
+            `,
+
+            "keyvault-powerplatform": `
+                <h1>Azure Key Vault Integration in Microsoft Power Platform: Enterprise Secrets Management</h1>
+                <p><strong>Autor:</strong> Gregor Otto Huber | <strong>Datum:</strong> 2026-10-18</p>
+                <hr style="border-color: #002b11; margin: 15px 0 25px 0;">
+
+                <h2>Einleitung</h2>
+                <p>Die Microsoft Power Platform ermöglicht es Fachabteilungen und Entwicklern (Citizen & Professional Developers), innerhalb kürzester Zeit Geschäftsanwendungen und Automatisierungen mit Power Apps und Power Automate zu erstellen. Im Unternehmensumfeld (Enterprise Context) entsteht dabei jedoch schnell eine kritische Sicherheitslücke: <strong>Secret Sprawl</strong>.</p>
+                <p>Oft werden Datenbank-Passwörter, API-Keys, OAuth-Tokens oder Verbindungskennwörter hartkodiert in Flows, Apps oder Umgebungsvariablen hinterlegt. Wechselt ein Passwort oder läuft ein Zertifikat ab, müssen Dutzende Automatisierungen manuell angepasst werden – ganz zu schweigen vom immensen Sicherheitsrisiko bei unbeabsichtigter Offenlegung. Die Lösung: Die nahtlose Einbindung des <strong>Azure Key Vault</strong> über verwaltete Umgebungsvariablen (Environment Variables).</p>
+
+                <h2>1. Die Architektur: Wie Power Platform auf Azure Key Vault zugreift</h2>
+                <p>Anstatt Geheimnisse im Klartext in der Power Platform Dataverse-Datenbank zu speichern, nutzt die Enterprise-Architektur Umgebungsvariablen vom Typ <em>Data Source / Secret</em>, die dynamisch auf ein Geheimnis im Azure Key Vault verweisen.</p>
+
+<pre>[ Power Apps / Power Automate Flow ]
+                 |
+                 v (Liest Umgebungsvariable)
+     [ Dataverse Environment Variable ]
+                 |
+                 v (Verwendet Azure Resource Manager / Managed Identity)
+       [ Azure Key Vault Secret ]</pre>
+
+                <p>Wenn ein Power Automate Flow ausgeführt wird, fragt Dataverse den aktuellen Wert des Secrets zur Laufzeit sicher über die Azure-Schnittstelle ab. Das Geheimnis verbleibt im Key Vault und wird nie dauerhaft in der Power Platform gespeichert.</p>
+
+                <h2>2. Schritt-für-Schritt Einrichtung im Enterprise-Umfeld</h2>
+                <h2>Schritt 1: Azure Key Vault vorbereiten</h2>
+                <ul>
+                    <li>Erstelle einen Azure Key Vault in deiner Azure Landing Zone.</li>
+                    <li>Aktiviere die Zugriffssteuerung (RBAC) oder erstelle eine <strong>Access Policy</strong>.</li>
+                    <li>Speichere das Geheimnis (z. B. <code>SQL-DB-ConnectionString</code> oder <code>SAP-API-Key</code>).</li>
+                </ul>
+
+                <h2>Schritt 2: Dienstprinzipal / Managed Identity berechtigen</h2>
+                <p>Damit Dataverse auf den Key Vault zugreifen darf, muss der Microsoft Power Platform Resource Provider berechtigt werden:</p>
+                <ul>
+                    <li><strong>App Name:</strong> Power Platform Resource Provider</li>
+                    <li><strong>Application ID:</strong> <code>782b5317-09d3-4a1a-a034-2e23f05f778a</code></li>
+                    <li><strong>Rolle / Recht:</strong> <code>Key Vault Secrets User</code> (Leserecht für Geheimnisse).</li>
+                </ul>
+
+                <h2>Schritt 3: Umgebungsvariable in der Power Platform Solution anlegen</h2>
+                <ul>
+                    <li>Erstelle in deiner Power Apps / Power Automate Solution eine neue Umgebungsvariable.</li>
+                    <li>Wähle als Datentyp <strong>Geheimnis (Secret)</strong>.</li>
+                    <li>Wähle als Secret Store <strong>Azure Key Vault</strong>.</li>
+                    <li>Gib Subscription ID, Resource Group, Key Vault Name und Secret Name an.</li>
+                </ul>
+
+                <h2>3. Best Practices & Sicherheits-Guardrails</h2>
+                <ul>
+                    <li><strong>Keine Klartext-Logs in Power Automate:</strong> Aktiviere bei allen Aktionen, die das Key-Vault-Geheimnis verarbeiten, in den Einstellungen die Option <strong>Secure Inputs</strong> und <strong>Secure Outputs</strong>.</li>
+                    <li><strong>ALM & Environment Strategy:</strong> Nutze für Dev-, Test- und Prod-Umgebungen unterschiedliche Key Vaults. Beim Deployment der Solution über Power Platform Pipelines wird lediglich die Zuordnung angepasst – der Code bleibt unberührt.</li>
+                    <li><strong>Secret Rotation automatisieren:</strong> Nutze Azure Event Grid, um ablaufende Schlüssel im Key Vault automatisch zu rotieren – ohne Ausfallzeit für die Anwendung.</li>
+                </ul>
+
+                <h2>Fazit</h2>
+                <p>Die Integration von Azure Key Vault in die Power Platform bildet die Brücke zwischen agiler Low-Code-Entwicklung und strengen Enterprise-Cybersecurity-Vorgaben. Sie verhindert Hartkodierung, zentralisiert das Auditing und sorgt für ein sauberes Application Lifecycle Management (ALM).</p>
+            `,
+
+            "landing-zones": `
+                <h1>Automated Azure Landing Zones & Policy-as-Code Frameworks</h1>
+                <p><strong>Autor:</strong> Gregor Otto Huber | <strong>Datum:</strong> 2026-10-05</p>
+                <hr style="border-color: #002b11; margin: 15px 0 25px 0;">
+
+                <h2>Einleitung</h2>
+                <p>Wenn Unternehmen ihre Cloud-Transformation von einzelnen Pilotprojekten auf hunderte Workloads skalieren, gerät die manuelle Verwaltung von Azure-Subskriptionen schnell an ihre Grenzen. Das Ergebnis sind Wildwuchs, unklare Sicherheitsgrenzen, explodierende Kosten und fehlende Transparenz.</p>
+                <p>Das <strong>Microsoft Cloud Adoption Framework (CAF)</strong> adressiert dieses Problem mit dem Konzept der <strong>Azure Landing Zones</strong>. Eine Landing Zone ist die Architektur-Grundlage: eine gut strukturierte, konfigurierte Multi-Subscription-Umgebung, die Sicherheit, Governance, Networking und Identitätsmanagement zentral bereitstellt.</p>
+
+                <h2>1. Das Management-Gruppen-Modell (Hierarchie)</h2>
+                <p>Eine Enterprise Landing Zone basiert auf einer durchdachten Hierarchie von Management Groups (MGs). Dadurch können Richtlinien (Azure Policies) und Zugriffsrechte (RBAC) vererbt werden.</p>
+                <ul>
+                    <li><strong>Tenant Root Group:</strong> Die oberste Ebene (global).</li>
+                    <li><strong>Platform Management Group:</strong> Zentrale Dienste (Identity, Log Analytics Workspace, Sentinel, Hub VNet, Azure Firewall).</li>
+                    <li><strong>Landing Zones Group:</strong> Für Anwendungs-Workloads (Corp mit interner Netzanbindung, Online mit DMZ/WAF, Confidential für erhöhte Souveränität).</li>
+                    <li><strong>Sandbox & Decommissioned:</strong> Testfelder mit strikten Ausgaben-Limits.</li>
+                </ul>
+
+                <h2>2. Infrastructure as Code (IaC) mit Terraform</h2>
+                <p>Das manuelle Klicken im Azure Portal ist für Enterprise-Landing-Zones tabu. Das offizielle <strong>Azure Landing Zones Terraform Modul</strong> ermöglicht die automatische Erstellung dieser Struktur:</p>
+
+<pre>module "enterprise_scale" {
+  source  = "Azure/caf-enterprise-scale/azurerm"
+  version = "6.0.0"
+
+  default_location = "germanywestcentral"
+  root_parent_id   = data.azurerm_client_config.current.tenant_id
+  root_id          = "contoso"
+  root_name        = "Contoso Enterprise"
+
+  deploy_core_landing_zones = true
+  deploy_mgmt_network       = true
+}</pre>
+
+                <h2>3. Policy-as-Code: Automatische Guardrails durchsetzen</h2>
+                <p>Anstatt nach der Bereitstellung von Ressourcen zu prüfen, ob diese sicher sind, setzen <strong>Azure Policies</strong> unumstößliche Leitplanken. Beispiele:</p>
+                <ul>
+                    <li><strong>Allowed Locations:</strong> Verhindert das Erstellen von Ressourcen außerhalb von <code>germanywestcentral</code> und <code>westeurope</code>.</li>
+                    <li><strong>Require Tags:</strong> Blockiert die Erstellung von Ressourcen ohne Zuordnung von <code>Environment</code>, <code>Owner</code> und <code>CostCenter</code>.</li>
+                    <li><strong>Network Isolation:</strong> Erfordert die Nutzung von Private Endpoints und verbietet öffentliche IPs an Datenbanken.</li>
+                </ul>
+
+                <h2>Fazit</h2>
+                <p>Automatisierte Azure Landing Zones schaffen das Fundament für agile Entwicklungsteams. Sie ermöglichen es Entwicklern, innerhalb klar abgesteckter Sicherheitsgrenzen eigenständig Ressourcen bereitzustellen.</p>
+            `,
+
+            "confidential-computing": `
+                <h1>Confidential Computing: Schutz von KI-Workloads und sensitiven Daten</h1>
+                <p><strong>Autor:</strong> Gregor Otto Huber | <strong>Datum:</strong> 2026-09-28</p>
+                <hr style="border-color: #002b11; margin: 15px 0 25px 0;">
+
+                <h2>Einleitung</h2>
+                <p>Mit dem rasanten Einzug von generativer künstlicher Intelligenz (Large Language Models, LLMs) und fortschrittlicher Datenanalyse stehen Unternehmen vor einer neuen Hürde: Wie lassen sich hochsensible Geschäftsgeheimnisse, Patientendaten oder Finanzdaten in Cloud-basierten KI-Modellen verarbeiten, ohne dass der Cloud-Anbieter oder Dritte Einblick in die Prompts und Trainingsdaten erhalten?</p>
+                <p>Die Antwort liegt in <strong>Confidential Computing</strong> und <strong>Confidential AI</strong>. Diese Technologien erweitern die klassische Datensicherheit um die Dimension der Verarbeitungssicherheit im RAM.</p>
+
+                <h2>1. Das Drei-Säulen-Modell der Datenverschlüsselung</h2>
+                <ul>
+                    <li><strong>Data at Rest:</strong> Verschlüsselung von Festplatten und Speicher (AES-256).</li>
+                    <li><strong>Data in Transit:</strong> Verschlüsselung von Netzwerktrends (TLS 1.3, IPsec).</li>
+                    <li><strong>Data in Use (Confidential Computing):</strong> Hardwarebasierte Verschlüsselung im Arbeitsspeicher (RAM) während der aktiven Berechnung.</li>
+                </ul>
+
+                <h2>2. Hardwarebasierte Enklaven</h2>
+                <p>Confidential Computing basiert auf Hardware-Innovationen führender Prozessor-Hersteller:</p>
+                <ul>
+                    <li><strong>AMD SEV-SNP:</strong> Verschlüsselt den gesamten Arbeitsspeicher einer virtuellen Maschine mit einem im Prozessor generierten Schlüssel.</li>
+                    <li><strong>Intel SGX / TDX:</strong> Erlaubt das Isolieren einzelner Code-Inseln oder ganzer VMs im Speicher.</li>
+                    <li><strong>NVIDIA H100 Confidential GPUs:</strong> Erweitert den Schutz erstmals auf GPU-beschleunigte KI-Workloads.</li>
+                </ul>
+
+                <h2>3. Remote Attestation: Vertrauen durch kryptografischen Beweis</h2>
+                <p>Bevor eine Anwendung schnelle Daten in eine vertrauliche Enklave sendet, fordert sie einen beglaubigten Hardware-Echtheitsnachweis an. Nur wenn bestätigt wird, dass die VM auf echter Confidential-Hardware läuft und der geladene Code nicht manipuliert wurde, wird der Entschlüsselungsschlüssel freigegeben.</p>
+
+                <h2>Fazit</h2>
+                <p>Confidential Computing verändert die Spielregeln der Cloud-Sicherheit grundlegend. Es ermöglicht <strong>Zero-Trust-Architekturen</strong> im Arbeitsspeicher und ebnet den Weg für vertrauliche KI-Analysen und den Einsatz von Cloud-Ressourcen im hochregulierten Umfeld.</p>
+            `
+        };
+
         document.addEventListener("DOMContentLoaded", () => {
-            // Typing Effect
             const typedTextElement = document.getElementById("typed-text");
             const textToType = "cat /etc/motd --sys-status";
             let index = 0;
-
             function typeWriter() {
                 if (index < textToType.length) {
-                    typedTextElement.textContent += textToType.charAt(index);
-                    index++;
+                    typedTextElement.textContent += textToType.charAt(index++);
                     setTimeout(typeWriter, 60);
                 }
             }
             typeWriter();
 
-            // Tag Filtering
             const tagButtons = document.querySelectorAll(".tag-btn");
             const postCards = document.querySelectorAll(".post-card");
-
             tagButtons.forEach(btn => {
                 btn.addEventListener("click", () => {
                     tagButtons.forEach(b => b.classList.remove("active"));
                     btn.classList.add("active");
-
                     const filterTag = btn.getAttribute("data-tag");
-
                     postCards.forEach(card => {
                         const cardTags = card.getAttribute("data-tags").split(" ");
-                        if (filterTag === "all" || cardTags.includes(filterTag)) {
-                            card.style.display = "block";
-                        } else {
-                            card.style.display = "none";
-                        }
+                        card.style.display = (filterTag === "all" || cardTags.includes(filterTag)) ? "block" : "none";
                     });
                 });
             });
 
-            // CLI Shell Emulator
+            const modal = document.getElementById("reader-modal");
+            const articleBody = document.getElementById("article-body");
+            const closeModalBtn = document.getElementById("close-modal");
+
+            function openArticle(postId) {
+                if (articlesData[postId]) {
+                    articleBody.innerHTML = articlesData[postId];
+                    modal.style.display = "flex";
+                    document.body.style.overflow = "hidden";
+                }
+            }
+
+            function closeModal() {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+
+            postCards.forEach(card => card.addEventListener("click", () => openArticle(card.getAttribute("data-post-id"))));
+            closeModalBtn.addEventListener("click", closeModal);
+            modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+            document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
             const cliInput = document.getElementById("cli-input");
             const cliOutput = document.getElementById("cli-output");
-
-            const commands = {
-                help: "Available commands:<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>linkedin</span>: Open LinkedIn profile<br>- <span class='highlight'>status</span>: Show system metrics<br>- <span class='highlight'>clear</span>: Clear terminal screen",
-                ls: "0x01: Microsoft Sovereign Cloud in Deutschland<br>0x02: Azure Key Vault Integration in Power Platform<br>0x03: Automated Azure Landing Zones<br>0x04: Confidential Computing",
-                linkedin: "Redirecting to https://www.linkedin.com/in/gregor-otto-huber ...",
-                status: "SYSTEM: NEXTSTOPCLOUD_NODE_01<br>REGION: GERMANY_WEST_CENTRAL (FRANKFURT)<br>SOVEREIGNTY: ENFORCED<br>UPTIME: 99.98%"
-            };
-
             cliInput.addEventListener("keydown", (e) => {
                 if (e.key === "Enter") {
                     const input = cliInput.value.trim().toLowerCase();
                     cliInput.value = "";
-
                     const p = document.createElement("p");
                     p.innerHTML = `<span class="prompt">root@nextstopcloud:~#</span> ${input}`;
                     cliOutput.appendChild(p);
-
                     const response = document.createElement("p");
-                    if (input === "clear") {
-                        cliOutput.innerHTML = "";
-                    } else if (input === "linkedin") {
-                        response.innerHTML = commands.linkedin;
+                    if (input === "clear") cliOutput.innerHTML = "";
+                    else if (input.startsWith("cat ")) {
+                        const num = input.split(" ")[1];
+                        const map = {"1":"sovereign-cloud", "2":"keyvault-powerplatform", "3":"landing-zones", "4":"confidential-computing"};
+                        if(map[num]) { openArticle(map[num]); response.innerHTML = `Opening article 0x0${num} ...`; }
+                        else { response.innerHTML = "Article not found."; }
                         cliOutput.appendChild(response);
-                        setTimeout(() => {
-                            window.open("https://www.linkedin.com/in/gregor-otto-huber", "_blank");
-                        }, 800);
-                    } else if (commands[input]) {
-                        response.innerHTML = commands[input];
+                    } else if (input === "ls") {
+                        response.innerHTML = "0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)";
                         cliOutput.appendChild(response);
-                    } else if (input !== "") {
-                        response.innerHTML = `Command not found: <span class="highlight">${input}</span>. Type 'help' for options.`;
+                    } else if (input === "help") {
+                        response.innerHTML = "Commands: <span class='highlight'>ls</span>, <span class='highlight'>cat 1..4</span>, <span class='highlight'>clear</span>";
                         cliOutput.appendChild(response);
                     }
-
                     cliOutput.scrollTop = cliOutput.scrollHeight;
                 }
             });
