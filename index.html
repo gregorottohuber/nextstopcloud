@@ -139,21 +139,31 @@
         .cli-input-line { display: flex; padding: 8px 15px; border-top: 1px dashed var(--term-dark-green); background-color: #05080c; }
         .cli-input-line input { background: transparent; border: none; outline: none; color: var(--term-green); font-family: var(--font-stack); font-size: 0.9rem; flex-grow: 1; }
         .terminal-footer { text-align: center; font-size: 0.8rem; color: var(--term-green-dim); border-top: 1px dashed var(--term-green-dim); padding-top: 15px; }
+
+        /* Fixed Reader Modal & Box Framing */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(10, 14, 20, 0.96); z-index: 2000; overflow-y: auto;
-            padding: 30px 20px; justify-content: center;
+            background-color: rgba(10, 14, 20, 0.96); z-index: 2000;
+            padding: 30px 20px; justify-content: center; align-items: center;
         }
         .modal-container {
-            max-width: 850px; width: 100%; background-color: #0a0e14;
-            border: 1px solid var(--term-green); box-shadow: 0 0 30px var(--term-green-glow);
-            padding: 30px; color: #d1d5db; line-height: 1.7;
+            max-width: 850px; width: 100%; max-height: 85vh;
+            background-color: #0a0e14; border: 1px solid var(--term-green);
+            box-shadow: 0 0 30px var(--term-green-glow); padding: 30px;
+            color: #d1d5db; line-height: 1.7; display: flex; flex-direction: column;
         }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--term-green-dim); padding-bottom: 15px; margin-bottom: 25px; }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px dashed var(--term-green-dim); padding-bottom: 15px; margin-bottom: 20px;
+            flex-shrink: 0;
+        }
         .close-btn { background: transparent; border: 1px solid var(--term-green); color: var(--term-green); padding: 6px 14px; font-family: var(--font-stack); cursor: pointer; }
         .close-btn:hover { background-color: var(--term-green); color: var(--bg-color); }
-        .article-content h1 { color: var(--term-green); font-size: 1.6rem; margin-bottom: 15px; line-height: 1.3; }
-        .article-content h2 { color: var(--term-green); font-size: 1.25rem; margin-top: 25px; margin-bottom: 12px; border-bottom: 1px solid var(--term-dark-green); padding-bottom: 5px; }
+        .article-content {
+            overflow-y: auto; padding-right: 15px; flex-grow: 1;
+        }
+        .article-content h1 { color: var(--term-green); font-size: 1.5rem; margin-bottom: 15px; line-height: 1.3; }
+        .article-content h2 { color: var(--term-green); font-size: 1.2rem; margin-top: 22px; margin-bottom: 10px; border-bottom: 1px solid var(--term-dark-green); padding-bottom: 5px; }
         .article-content p { margin-bottom: 16px; color: #d1d5db; font-size: 0.95rem; }
         .article-content ul { margin-bottom: 18px; padding-left: 25px; color: #d1d5db; }
         .article-content li { margin-bottom: 8px; }
@@ -177,17 +187,17 @@
             <a href="https://www.linkedin.com/in/gregor-otto-huber" target="_blank" class="profile-link">[LinkedIn Profile ↗]</a>
         </div>
         <section class="case-studies-container">
-            <div class="section-title">FEATURED_PROJECTS // PUBLIC_CASE_STUDIES</div>
+            <div class="section-title">PROJECTS_CONTRIBUTED_TO // PUBLIC_CASE_STUDIES</div>
             <div class="case-study-card">
-                <div class="case-study-info"><div class="case-study-title">Google Cloud Workstations @ DZ BANK</div><div class="case-study-desc">Improving developer productivity & security with cloud-hosted development environments.</div></div>
+                <div class="case-study-info"><div class="case-study-title">Google Cloud Workstations @ DZ BANK</div><div class="case-study-desc">Project Contribution: Modernizing developer environments with cloud-hosted workstations.</div></div>
                 <a href="https://cloud.google.com/blog/products/application-modernization/dz-bank-improves-developer-productivity-with-cloud-workstations?hl=en" target="_blank" class="ext-link-btn">[Read Blog ↗]</a>
             </div>
             <div class="case-study-card">
-                <div class="case-study-info"><div class="case-study-title">Google Cloud Official Customer Story: DZ BANK</div><div class="case-study-desc">Enterprise modern cloud platform architecture and digital transformation journey.</div></div>
+                <div class="case-study-info"><div class="case-study-title">Google Cloud Customer Story: DZ BANK</div><div class="case-study-desc">Project Contribution: Enterprise cloud platform modernization & digital transformation architecture.</div></div>
                 <a href="https://cloud.google.com/customers/dzbank?hl=de" target="_blank" class="ext-link-btn">[Read Story ↗]</a>
             </div>
             <div class="case-study-card">
-                <div class="case-study-info"><div class="case-study-title">Cloud Run First Approach @ DZ BANK</div><div class="case-study-desc">Unlocking big cost savings and scalability using serverless architecture patterns.</div></div>
+                <div class="case-study-info"><div class="case-study-title">Cloud Run First Approach @ DZ BANK</div><div class="case-study-desc">Project Contribution: Architectural design for serverless modernization & cost optimization.</div></div>
                 <a href="https://cloud.google.com/blog/products/serverless/how-dz-bank-uses-a-cloud-run-first-approach-to-unlock-big-savings?hl=en" target="_blank" class="ext-link-btn">[Read Blog ↗]</a>
             </div>
         </section>
