@@ -220,7 +220,7 @@
         <!-- 2. Interactive Terminal Shell -->
         <section class="interactive-terminal">
             <div class="terminal-bar"><span class="terminal-title">cli_shell_v2.4.1</span><span>STATUS: ONLINE</span></div>
-            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'istio'</span> for mTLS demo, <span class="highlight">'ls'</span> for logs, or <span class="highlight">'linkedin'</span> for profile.</p></div>
+            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'istio'</span> for mTLS demo, <span class="highlight">'kubectl get pods'</span> for cluster overview, <span class="highlight">'ls'</span> for logs.</p></div>
             <div class="cli-input-line"><span class="prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
         </section>
 
@@ -510,7 +510,7 @@
             const cliOutput = document.getElementById("cli-output");
 
             const commands = {
-                help: "Available commands:<br>- <span class='highlight'>istio</span>: Run interactive Istio mTLS demo<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article by number<br>- <span class='highlight'>linkedin</span>: Open LinkedIn profile<br>- <span class='highlight'>status</span>: Show system metrics<br>- <span class='highlight'>clear</span>: Clear terminal screen",
+                help: "Available commands:<br>- <span class='highlight'>istio</span>: Run interactive Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods and Istio sidecars (try <span class='highlight'>-o wide --all-namespaces</span>)<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article by number<br>- <span class='highlight'>linkedin</span>: Open LinkedIn profile<br>- <span class='highlight'>status</span>: Show system metrics<br>- <span class='highlight'>clear</span>: Clear terminal screen",
                 ls: "0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)",
                 linkedin: "Redirecting to https://www.linkedin.com/in/gregor-otto-huber ...",
                 status: "SYSTEM: NEXTSTOPCLOUD_NODE_01<br>REGION: GERMANY_WEST_CENTRAL (FRANKFURT)<br>SOVEREIGNTY: ENFORCED<br>UPTIME: 99.98%"
@@ -540,36 +540,84 @@
                 });
             }
 
+            function renderKubectl(args) {
+                const isWide = args.includes("-o wide") || args.includes("--output wide") || args.includes("-owide");
+                const isAllNs = args.includes("--all-namespaces") || args.includes("-A");
+
+                let output = "";
+                
+                if (isAllNs) {
+                    if (isWide) {
+                        output = "NAMESPACE      NAME                                     READY   STATUS    RESTARTS   AGE   IP            NODE          NOMINATED NODE   READINESS GATES<br>" +
+                                 "istio-system   istiod-6c84f8db-pxv52                    1/1     Running   0          18h   10.244.0.5    node-1-aks    &lt;none&gt;           &lt;none&gt;<br>" +
+                                 "kube-system    coredns-5c6b6c8c47-k2zpx                 1/1     Running   0          24h   10.244.0.2    node-1-aks    &lt;none&gt;           &lt;none&gt;<br>" +
+                                 "kube-system    kube-proxy-8x92l                         1/1     Running   0          24h   10.244.0.1    node-1-aks    &lt;none&gt;           &lt;none&gt;<br>" +
+                                 "default        frontend-7798b64b9d-jcgph                2/2     Running   0          2h    10.244.1.12   node-2-aks    &lt;none&gt;           &lt;none&gt;<br>" +
+                                 "default        backend-5999b86b8d-lcgph                 2/2     Running   0          2h    10.244.1.13   node-2-aks    &lt;none&gt;           &lt;none&gt;";
+                    } else {
+                        output = "NAMESPACE      NAME                                     READY   STATUS    RESTARTS   AGE<br>" +
+                                 "istio-system   istiod-6c84f8db-pxv52                    1/1     Running   0          18h<br>" +
+                                 "kube-system    coredns-5c6b6c8c47-k2zpx                 1/1     Running   0          24h<br>" +
+                                 "kube-system    kube-proxy-8x92l                         1/1     Running   0          24h<br>" +
+                                 "default        frontend-7798b64b9d-jcgph                2/2     Running   0          2h<br>" +
+                                 "default        backend-5999b86b8d-lcgph                 2/2     Running   0          2h";
+                    }
+                } else {
+                    // Default namespace only
+                    if (isWide) {
+                        output = "NAME                                     READY   STATUS    RESTARTS   AGE   IP            NODE          NOMINATED NODE   READINESS GATES<br>" +
+                                 "frontend-7798b64b9d-jcgph                2/2     Running   0          2h    10.244.1.12   node-2-aks    &lt;none&gt;           &lt;none&gt;<br>" +
+                                 "backend-5999b86b8d-lcgph                 2/2     Running   0          2h    10.244.1.13   node-2-aks    &lt;none&gt;           &lt;none&gt;";
+                    } else {
+                        output = "NAME                                     READY   STATUS    RESTARTS   AGE<br>" +
+                                 "frontend-7798b64b9d-jcgph                2/2     Running   0          2h<br>" +
+                                 "backend-5999b86b8d-lcgph                 2/2     Running   0          2h";
+                    }
+                }
+
+                const responseP = document.createElement("p");
+                responseP.innerHTML = `<pre style="color:#00ff66; line-height: 1.4; font-family:var(--font-stack); font-size:0.75rem; margin:8px 0; overflow-x:auto;">${output}</pre>`;
+                cliOutput.appendChild(responseP);
+                cliOutput.scrollTop = cliOutput.scrollHeight;
+            }
+
             cliInput.addEventListener("keydown", (e) => {
                 if (e.key === "Enter") {
-                    const input = cliInput.value.trim().toLowerCase();
+                    const input = cliInput.value.trim();
                     cliInput.value = "";
+                    const lowerInput = input.toLowerCase();
+                    
                     const p = document.createElement("p");
                     p.innerHTML = `<span class="prompt">root@nextstopcloud:~#</span> ${input}`;
                     cliOutput.appendChild(p);
                     const response = document.createElement("p");
 
-                    if (input === "clear") {
+                    if (lowerInput === "clear") {
                         cliOutput.innerHTML = "";
-                    } else if (input === "istio") {
+                    } else if (lowerInput === "istio") {
                         runIstioDemo();
-                    } else if (input.startsWith("cat ")) {
-                        const num = input.split(" ")[1];
+                    } else if (lowerInput.startsWith("kubectl get pods") || lowerInput.startsWith("kubectl get pod")) {
+                        renderKubectl(lowerInput);
+                    } else if (lowerInput.startsWith("kubectl") && !lowerInput.startsWith("kubectl get pod")) {
+                        response.innerHTML = "Mock Terminal supports: <span class='highlight'>kubectl get pods</span> (flags: <span class='highlight'>-A</span>, <span class='highlight'>--all-namespaces</span>, <span class='highlight'>-o wide</span>).";
+                        cliOutput.appendChild(response);
+                    } else if (lowerInput.startsWith("cat ")) {
+                        const num = lowerInput.split(" ")[1];
                         const map = {"1":"sovereign-cloud", "2":"keyvault-powerplatform", "3":"landing-zones", "4":"confidential-computing"};
                         if(map[num]) { openArticle(map[num]); response.innerHTML = `Opening article 0x0${num} ...`; }
                         else { response.innerHTML = "Article not found."; }
                         cliOutput.appendChild(response);
-                    } else if (input === "linkedin") {
+                    } else if (lowerInput === "linkedin") {
                         response.innerHTML = commands.linkedin;
                         cliOutput.appendChild(response);
                         setTimeout(() => {
                             window.open("https://www.linkedin.com/in/gregor-otto-huber", "_blank");
                         }, 800);
-                    } else if (commands[input]) {
-                        response.innerHTML = commands[input];
+                    } else if (commands[lowerInput]) {
+                        response.innerHTML = commands[lowerInput];
                         cliOutput.appendChild(response);
-                    } else if (input !== "") {
-                        response.innerHTML = `Command not found: <span class="highlight">${input}</span>. Type 'help' or 'istio' for options.`;
+                    } else if (lowerInput !== "") {
+                        response.innerHTML = `Command not found: <span class="highlight">${input}</span>. Type 'help', 'istio', or 'kubectl get pods' for options.`;
                         cliOutput.appendChild(response);
                     }
                     cliOutput.scrollTop = cliOutput.scrollHeight;
