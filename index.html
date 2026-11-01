@@ -72,10 +72,8 @@
             text-shadow: 0 0 8px var(--term-green-glow);
             overflow-x: auto; margin-bottom: 15px;
         }
-        .prompt-line { font-size: 1.05rem; display: flex; align-items: center; flex-wrap: wrap; }
+        .prompt-line { font-size: 1.05rem; display: flex; align-items: center; flex-wrap: wrap; color: var(--term-green); }
         .prompt { color: var(--term-green-dim); margin-right: 8px; }
-        .cursor { animation: blink 1s infinite; }
-        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
         .profile-bar {
             display: flex; justify-content: space-between; align-items: center;
             background-color: rgba(0, 43, 17, 0.3);
@@ -192,7 +190,7 @@
  |\ | |___  \/   |  [__   |  |  | |__] |    |    |  | |  | |  \ 
  | \| |___ _/\_  |  ___]  |  |__| |    |___ |___ |__| |__| |__/ 
             </pre>
-            <div class="prompt-line"><span class="prompt">guest@nextstopcloud:~$</span><span class="typing-effect" id="typed-text"></span><span class="cursor">█</span></div>
+            <div class="prompt-line"><span class="prompt">guest@nextstopcloud:~$</span>cat /etc/motd --sys-status</div>
         </header>
 
         <div class="profile-bar">
@@ -200,7 +198,14 @@
             <a href="https://www.linkedin.com/in/gregor-otto-huber" target="_blank" class="profile-link">[LinkedIn Profile ↗]</a>
         </div>
 
-        <!-- 1. Case Studies / Projects Section -->
+        <!-- 1. Interactive Terminal Shell (Placed directly at top) -->
+        <section class="interactive-terminal">
+            <div class="terminal-bar"><span class="terminal-title">cli_shell_v2.4.1</span><span>STATUS: ONLINE</span></div>
+            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'istio'</span> for mTLS demo, <span class="highlight">'kubectl get pods'</span> for cluster overview, <span class="highlight">'ls'</span> for logs.</p></div>
+            <div class="cli-input-line"><span class="prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
+        </section>
+
+        <!-- 2. Case Studies / Projects Section -->
         <section class="case-studies-container">
             <div class="section-title">PROJECTS_CONTRIBUTED_TO // PUBLIC_CASE_STUDIES</div>
             <div class="case-study-card">
@@ -215,13 +220,6 @@
                 <div class="case-study-info"><div class="case-study-title">Cloud Run First Approach @ DZ BANK</div><div class="case-study-desc">Project Contribution: Architectural design for serverless modernization & cost optimization.</div></div>
                 <a href="https://cloud.google.com/blog/products/serverless/how-dz-bank-uses-a-cloud-run-first-approach-to-unlock-big-savings?hl=en" target="_blank" class="ext-link-btn">[Read Blog ↗]</a>
             </div>
-        </section>
-
-        <!-- 2. Interactive Terminal Shell -->
-        <section class="interactive-terminal">
-            <div class="terminal-bar"><span class="terminal-title">cli_shell_v2.4.1</span><span>STATUS: ONLINE</span></div>
-            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'istio'</span> for mTLS demo, <span class="highlight">'kubectl get pods'</span> for cluster overview, <span class="highlight">'ls'</span> for logs.</p></div>
-            <div class="cli-input-line"><span class="prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
         </section>
 
         <!-- 3. Filter Navigation & Article List -->
@@ -459,17 +457,6 @@
         };
 
         document.addEventListener("DOMContentLoaded", () => {
-            const typedTextElement = document.getElementById("typed-text");
-            const textToType = "cat /etc/motd --sys-status";
-            let index = 0;
-            function typeWriter() {
-                if (index < textToType.length) {
-                    typedTextElement.textContent += textToType.charAt(index++);
-                    setTimeout(typeWriter, 60);
-                }
-            }
-            typeWriter();
-
             const tagButtons = document.querySelectorAll(".tag-btn");
             const postCards = document.querySelectorAll(".post-card");
             tagButtons.forEach(btn => {
@@ -563,7 +550,6 @@
                                  "default        backend-5999b86b8d-lcgph                 2/2     Running   0          2h";
                     }
                 } else {
-                    // Default namespace only
                     if (isWide) {
                         output = "NAME                                     READY   STATUS    RESTARTS   AGE   IP            NODE          NOMINATED NODE   READINESS GATES<br>" +
                                  "frontend-7798b64b9d-jcgph                2/2     Running   0          2h    10.244.1.12   node-2-aks    &lt;none&gt;           &lt;none&gt;<br>" +
