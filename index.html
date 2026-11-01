@@ -59,7 +59,7 @@
         }
         .terminal-header {
             border-bottom: 1px dashed var(--term-green-dim);
-            padding-bottom: 20px; margin-bottom: 25px;
+            padding-bottom: 15px; margin-bottom: 25px;
         }
         .sys-info {
             display: flex; justify-content: space-between;
@@ -70,10 +70,8 @@
             font-size: 0.62rem; line-height: 1.2;
             color: var(--term-green);
             text-shadow: 0 0 8px var(--term-green-glow);
-            overflow-x: auto; margin-bottom: 15px;
+            overflow-x: auto; margin-bottom: 0;
         }
-        .prompt-line { font-size: 1.05rem; display: flex; align-items: center; flex-wrap: wrap; color: var(--term-green); }
-        .prompt { color: var(--term-green-dim); margin-right: 8px; }
         .profile-bar {
             display: flex; justify-content: space-between; align-items: center;
             background-color: rgba(0, 43, 17, 0.3);
@@ -190,7 +188,6 @@
  |\ | |___  \/   |  [__   |  |  | |__] |    |    |  | |  | |  \ 
  | \| |___ _/\_  |  ___]  |  |__| |    |___ |___ |__| |__| |__/ 
             </pre>
-            <div class="prompt-line"><span class="prompt">guest@nextstopcloud:~$</span>cat /etc/motd --sys-status</div>
         </header>
 
         <div class="profile-bar">
@@ -198,7 +195,7 @@
             <a href="https://www.linkedin.com/in/gregor-otto-huber" target="_blank" class="profile-link">[LinkedIn Profile ↗]</a>
         </div>
 
-        <!-- 1. Interactive Terminal Shell (Placed directly at top) -->
+        <!-- 1. Interactive Terminal Shell -->
         <section class="interactive-terminal">
             <div class="terminal-bar"><span class="terminal-title">cli_shell_v2.4.1</span><span>STATUS: ONLINE</span></div>
             <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'istio'</span> for mTLS demo, <span class="highlight">'kubectl get pods'</span> for cluster overview, <span class="highlight">'ls'</span> for logs.</p></div>
