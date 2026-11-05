@@ -283,7 +283,7 @@
     <div class="modal-overlay" id="algo-modal">
         <div class="modal-container">
             <div class="modal-header">
-                <span>ALGORITHM_VISUALIZER_V1.0</span>
+                <span>ALGORITHM_VISUALIZER_V1.0 (Keys: 1, 2, 3)</span>
                 <button class="close-btn" id="close-algo-modal">[ESC / CLOSE]</button>
             </div>
             <div class="algo-controls">
@@ -518,7 +518,6 @@
             postCards.forEach(card => card.addEventListener("click", () => openArticle(card.getAttribute("data-post-id"))));
             closeModalBtn.addEventListener("click", closeModal);
             modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-            document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
             // Algorithm Visualizer Logic
             const algoModal = document.getElementById("algo-modal");
@@ -535,6 +534,7 @@
             function openAlgoModal() {
                 algoModal.style.display = "flex";
                 document.body.style.overflow = "hidden";
+                if (document.activeElement) document.activeElement.blur();
                 startAlgoAnimation();
             }
 
@@ -545,6 +545,27 @@
             }
 
             closeAlgoBtn.addEventListener("click", closeAlgoModal);
+            algoModal.addEventListener("click", (e) => { if (e.target === algoModal) closeAlgoModal(); });
+
+            // Universal ESC Key Handler for both modals & 1,2,3 hotkeys
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    closeModal();
+                    closeAlgoModal();
+                }
+                
+                // Hotkeys 1, 2, 3 inside Algorithm Modal
+                if (algoModal.style.display === "flex") {
+                    if (e.key === "1") {
+                        document.getElementById("btn-algo-lb").click();
+                    } else if (e.key === "2") {
+                        document.getElementById("btn-algo-sort").click();
+                    } else if (e.key === "3") {
+                        document.getElementById("btn-algo-mesh").click();
+                    }
+                }
+            });
+
             document.getElementById("btn-algo-play").addEventListener("click", () => {
                 isPlaying = !isPlaying;
                 if (isPlaying) startAlgoAnimation();
@@ -637,7 +658,7 @@
                         });
 
                     } else if (currentAlgo === "mesh") {
-                        // Fixed & Robust Service Mesh Shortest Path
+                        // Service Mesh Shortest Path
                         const gridNodes = [
                             {x: 80,  y: 125, name: "Ingress"},
                             {x: 240, y: 60,  name: "Auth-v1"},
@@ -721,7 +742,7 @@
             const cliOutput = document.getElementById("cli-output");
 
             const commands = {
-                help: "Available commands:<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
+                help: "Available commands:<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer (Hotkeys: 1, 2, 3)<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
                 ls: "0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)",
                 linkedin: "Redirecting to https://www.linkedin.com/in/gregor-otto-huber ..."
             };
@@ -833,7 +854,7 @@
                         cliOutput.innerHTML = "";
                     } else if (lowerInput === "algo" || lowerInput === "visualize" || lowerInput === "algorithms") {
                         openAlgoModal();
-                        response.innerHTML = "Launching Algorithm Visualizer GUI shell...";
+                        response.innerHTML = "Launching Algorithm Visualizer GUI shell... (Use keys 1, 2, 3 to switch)";
                         cliOutput.appendChild(response);
                     } else if (lowerInput === "istio") {
                         runIstioDemo();
