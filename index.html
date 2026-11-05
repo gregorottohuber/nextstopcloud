@@ -557,7 +557,7 @@
                 setActiveAlgo("sort", e.target, "Array Alignment & QuickSort: Reordering memory blocks by size.");
             });
             document.getElementById("btn-algo-mesh").addEventListener("click", (e) => {
-                setActiveAlgo("mesh", e.target, "Service Mesh Pathfinding: Finding optimal mTLS route across microservice nodes.");
+                setActiveAlgo("mesh", e.target, "Service Mesh Shortest Path: Finding optimal mTLS route from Ingress to DB.");
             });
 
             function setActiveAlgo(type, btn, desc) {
@@ -566,11 +566,13 @@
                 currentAlgo = type;
                 algoStatus.textContent = desc;
                 stepCounter = 0;
+                meshProgress = 0;
             }
 
-            // Simple Canvas Render Loops
+            // Animation Variables
             let packets = [];
             let sortArr = [40, 90, 20, 110, 60, 140, 80, 50, 130, 30, 100, 70];
+            let meshProgress = 0;
 
             function startAlgoAnimation() {
                 if (animId) cancelAnimationFrame(animId);
@@ -583,11 +585,11 @@
                         ctx.fillStyle = "#00ff66";
                         ctx.font = "12px Fira Code";
                         ctx.fillText("[ Ingress Load Balancer ]", 30, 125);
-                        ctx.strokeRect(20, 105, 180, 35);
                         ctx.strokeStyle = "#00b347";
+                        ctx.strokeRect(20, 105, 180, 35);
 
                         const nodes = [ {y: 40, label: "Pod-01"}, {y: 95, label: "Pod-02"}, {y: 150, label: "Pod-03"}, {y: 205, label: "Pod-04"} ];
-                        nodes.forEach((n, idx) => {
+                        nodes.forEach((n) => {
                             ctx.fillStyle = "#00ff66";
                             ctx.fillText(`[ ${n.label} ]`, 620, n.y + 15);
                             ctx.strokeRect(610, n.y, 110, 25);
@@ -635,49 +637,78 @@
                         });
 
                     } else if (currentAlgo === "mesh") {
-                        // Render Mesh Pathfinding
+                        // Fixed & Robust Service Mesh Shortest Path
                         const gridNodes = [
-                            {x: 100, y: 60, id: "Gateway"},
-                            {x: 250, y: 50, id: "Auth"}, {x: 250, y: 180, id: "Payments"},
-                            {x: 450, y: 80, id: "Orders"}, {x: 450, y: 180, id: "Vault"},
-                            {x: 650, y: 120, id: "Database"}
+                            {x: 80,  y: 125, name: "Ingress"},
+                            {x: 240, y: 60,  name: "Auth-v1"},
+                            {x: 240, y: 190, name: "Auth-v2"},
+                            {x: 420, y: 60,  name: "Orders"},
+                            {x: 420, y: 190, name: "Vault"},
+                            {x: 600, y: 125, name: "Database"}
                         ];
 
-                        ctx.strokeStyle = "rgba(0, 255, 102, 0.25)";
+                        const connections = [
+                            [0,1], [0,2], [1,3], [2,4], [3,5], [4,5], [1,4], [2,3]
+                        ];
+
+                        // Draw Background Mesh Lines
+                        ctx.strokeStyle = "rgba(0, 179, 71, 0.3)";
                         ctx.lineWidth = 1;
+                        connections.forEach(conn => {
+                            ctx.beginPath();
+                            ctx.moveTo(gridNodes[conn[0]].x, gridNodes[conn[0]].y);
+                            ctx.lineTo(gridNodes[conn[1]].x, gridNodes[conn[1]].y);
+                            ctx.stroke();
+                        });
 
-                        // Draw Connections
-                        for(let i=0; i<gridNodes.length; i++) {
-                            for(let j=i+1; j<gridNodes.length; j++) {
-                                ctx.beginPath();
-                                ctx.moveTo(gridNodes[i].x, gridNodes[i].y);
-                                ctx.lineTo(gridNodes[j].x, gridNodes[j].y);
-                                ctx.stroke();
-                            }
-                        }
+                        // Active Shortest Path: 0 -> 1 -> 3 -> 5
+                        const activePath = [0, 1, 3, 5];
 
-                        // Highlight Path
                         ctx.strokeStyle = "#00ff66";
-                        ctx.lineWidth = 2;
-                        const path = [0, 1, 3, 5];
+                        ctx.lineWidth = 3;
                         ctx.beginPath();
-                        ctx.moveTo(gridNodes[path[0]].x, gridNodes[path[0]].y);
-                        for(let k=1; k<path.length; k++) {
-                            ctx.lineTo(gridNodes[path[k]].x, gridNodes[path[k]].y);
+                        ctx.moveTo(gridNodes[activePath[0]].x, gridNodes[activePath[0]].y);
+                        for(let k=1; k<activePath.length; k++) {
+                            ctx.lineTo(gridNodes[activePath[k]].x, gridNodes[activePath[k]].y);
                         }
                         ctx.stroke();
 
+                        // Render Packet along shortest path
+                        if (isPlaying) {
+                            meshProgress += 0.012;
+                            if (meshProgress > 1) meshProgress = 0;
+                        }
+
+                        let totalSegments = activePath.length - 1;
+                        let segIndex = Math.floor(meshProgress * totalSegments);
+                        let segProgress = (meshProgress * totalSegments) - segIndex;
+                        if (segIndex >= totalSegments) { segIndex = totalSegments - 1; segProgress = 1; }
+
+                        let n1 = gridNodes[activePath[segIndex]];
+                        let n2 = gridNodes[activePath[segIndex + 1]];
+                        let px = n1.x + segProgress * (n2.x - n1.x);
+                        let py = n1.y + segProgress * (n2.y - n1.y);
+
+                        ctx.fillStyle = "#ffffff";
+                        ctx.beginPath();
+                        ctx.arc(px, py, 6, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        // Draw Node Circles & Labels
                         gridNodes.forEach((gn, idx) => {
-                            ctx.fillStyle = path.includes(idx) ? "#00ff66" : "#002b11";
+                            const isPath = activePath.includes(idx);
+                            ctx.fillStyle = isPath ? "#00ff66" : "#002b11";
                             ctx.beginPath();
-                            ctx.arc(gn.x, gn.y, 14, 0, Math.PI * 2);
+                            ctx.arc(gn.x, gn.y, 12, 0, Math.PI * 2);
                             ctx.fill();
-                            ctx.strokeStyle = "#00ff66";
+
+                            ctx.strokeStyle = isPath ? "#00ff66" : "#00b347";
+                            ctx.lineWidth = 1.5;
                             ctx.stroke();
 
-                            ctx.fillStyle = path.includes(idx) ? "#0a0e14" : "#00ff66";
-                            ctx.font = "10px Fira Code";
-                            ctx.fillText(gn.id, gn.x - 18, gn.y + 3);
+                            ctx.fillStyle = isPath ? "#0a0e14" : "#00ff66";
+                            ctx.font = "9px Fira Code";
+                            ctx.fillText(gn.name, gn.x - 18, gn.y + 3);
                         });
                     }
 
