@@ -147,6 +147,7 @@
         }
         .terminal-body { padding: 15px; min-height: 140px; max-height: 250px; overflow-y: auto; font-size: 0.88rem; line-height: 1.45; }
         .highlight { color: #fff; font-weight: bold; }
+        .prompt { color: var(--term-green-dim); margin-right: 8px; }
         .cli-input-line { display: flex; padding: 8px 15px; border-top: 1px dashed var(--term-dark-green); background-color: #05080c; }
         .cli-input-line input { background: transparent; border: none; outline: none; color: var(--term-green); font-family: var(--font-stack); font-size: 0.9rem; flex-grow: 1; }
         .terminal-footer { text-align: center; font-size: 0.8rem; color: var(--term-green-dim); border-top: 1px dashed var(--term-green-dim); padding-top: 15px; }
@@ -176,6 +177,13 @@
         .article-content ul { margin-bottom: 18px; padding-left: 25px; color: #d1d5db; }
         .article-content li { margin-bottom: 8px; }
         .article-content pre { background-color: #05080c; border: 1px solid var(--term-dark-green); padding: 15px; overflow-x: auto; color: var(--term-green); font-family: var(--font-stack); font-size: 0.85rem; margin: 20px 0; }
+
+        /* Algorithm Visualizer Styles */
+        .algo-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; align-items: center; }
+        .algo-btn { background: transparent; border: 1px solid var(--term-green-dim); color: var(--term-green); padding: 5px 12px; cursor: pointer; font-family: var(--font-stack); font-size: 0.85rem; }
+        .algo-btn:hover, .algo-btn.active { background-color: var(--term-green); color: var(--bg-color); }
+        .canvas-area { border: 1px solid var(--term-dark-green); background-color: #05080c; width: 100%; height: 260px; position: relative; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        canvas { width: 100%; height: 100%; display: block; }
     </style>
 </head>
 <body class="crt">
@@ -198,7 +206,7 @@
         <!-- 1. Interactive Terminal Shell -->
         <section class="interactive-terminal">
             <div class="terminal-bar"><span class="terminal-title">cli_shell_v2.4.1</span><span>STATUS: ONLINE</span></div>
-            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'help'</span> for commands, <span class="highlight">'istio'</span> for mTLS demo, <span class="highlight">'kubectl get pods'</span> for cluster overview, <span class="highlight">'ls'</span> for logs.</p></div>
+            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'algo'</span> for Visualizer, <span class="highlight">'terraform plan'</span> for Policy-as-Code, <span class="highlight">'istio'</span> for mTLS, or <span class="highlight">'kubectl get pods'</span>.</p></div>
             <div class="cli-input-line"><span class="prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
         </section>
 
@@ -268,6 +276,28 @@
         <div class="modal-container">
             <div class="modal-header"><span>READER_SHELL_V1.0</span><button class="close-btn" id="close-modal">[ESC / CLOSE]</button></div>
             <div class="article-content" id="article-body"></div>
+        </div>
+    </div>
+
+    <!-- Algorithm Visualizer Modal -->
+    <div class="modal-overlay" id="algo-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <span>ALGORITHM_VISUALIZER_V1.0</span>
+                <button class="close-btn" id="close-algo-modal">[ESC / CLOSE]</button>
+            </div>
+            <div class="algo-controls">
+                <button class="algo-btn active" id="btn-algo-lb">[1. Round-Robin Load Balancer]</button>
+                <button class="algo-btn" id="btn-algo-sort">[2. QuickSort / Array Alignment]</button>
+                <button class="algo-btn" id="btn-algo-mesh">[3. Service Mesh Pathfinding]</button>
+                <button class="algo-btn" id="btn-algo-play" style="margin-left:auto;">▶ Play / Pause</button>
+            </div>
+            <div class="canvas-area">
+                <canvas id="algoCanvas" width="780" height="250"></canvas>
+            </div>
+            <div id="algo-status" style="font-size: 0.85rem; color: var(--term-green-dim);">
+                Selected: Round-Robin Load Balancing across 4 worker pods.
+            </div>
         </div>
     </div>
 
@@ -490,14 +520,179 @@
             modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
             document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
+            // Algorithm Visualizer Logic
+            const algoModal = document.getElementById("algo-modal");
+            const closeAlgoBtn = document.getElementById("close-algo-modal");
+            const canvas = document.getElementById("algoCanvas");
+            const ctx = canvas.getContext("2d");
+            const algoStatus = document.getElementById("algo-status");
+
+            let currentAlgo = "lb";
+            let animId = null;
+            let isPlaying = true;
+            let stepCounter = 0;
+
+            function openAlgoModal() {
+                algoModal.style.display = "flex";
+                document.body.style.overflow = "hidden";
+                startAlgoAnimation();
+            }
+
+            function closeAlgoModal() {
+                algoModal.style.display = "none";
+                document.body.style.overflow = "auto";
+                if (animId) cancelAnimationFrame(animId);
+            }
+
+            closeAlgoBtn.addEventListener("click", closeAlgoModal);
+            document.getElementById("btn-algo-play").addEventListener("click", () => {
+                isPlaying = !isPlaying;
+                if (isPlaying) startAlgoAnimation();
+            });
+
+            document.getElementById("btn-algo-lb").addEventListener("click", (e) => {
+                setActiveAlgo("lb", e.target, "Round-Robin Load Balancer: Distributing incoming web requests evenly across backend nodes.");
+            });
+            document.getElementById("btn-algo-sort").addEventListener("click", (e) => {
+                setActiveAlgo("sort", e.target, "Array Alignment & QuickSort: Reordering memory blocks by size.");
+            });
+            document.getElementById("btn-algo-mesh").addEventListener("click", (e) => {
+                setActiveAlgo("mesh", e.target, "Service Mesh Pathfinding: Finding optimal mTLS route across microservice nodes.");
+            });
+
+            function setActiveAlgo(type, btn, desc) {
+                document.querySelectorAll(".algo-btn").forEach(b => { if(b.id.startsWith("btn-algo-")) b.classList.remove("active"); });
+                btn.classList.add("active");
+                currentAlgo = type;
+                algoStatus.textContent = desc;
+                stepCounter = 0;
+            }
+
+            // Simple Canvas Render Loops
+            let packets = [];
+            let sortArr = [40, 90, 20, 110, 60, 140, 80, 50, 130, 30, 100, 70];
+
+            function startAlgoAnimation() {
+                if (animId) cancelAnimationFrame(animId);
+
+                function loop() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    if (currentAlgo === "lb") {
+                        // Render Load Balancer
+                        ctx.fillStyle = "#00ff66";
+                        ctx.font = "12px Fira Code";
+                        ctx.fillText("[ Ingress Load Balancer ]", 30, 125);
+                        ctx.strokeRect(20, 105, 180, 35);
+                        ctx.strokeStyle = "#00b347";
+
+                        const nodes = [ {y: 40, label: "Pod-01"}, {y: 95, label: "Pod-02"}, {y: 150, label: "Pod-03"}, {y: 205, label: "Pod-04"} ];
+                        nodes.forEach((n, idx) => {
+                            ctx.fillStyle = "#00ff66";
+                            ctx.fillText(`[ ${n.label} ]`, 620, n.y + 15);
+                            ctx.strokeRect(610, n.y, 110, 25);
+                        });
+
+                        if (isPlaying && Math.random() < 0.08) {
+                            const targetNode = nodes[stepCounter % nodes.length];
+                            packets.push({x: 200, y: 122, targetY: targetNode.y + 12, progress: 0});
+                            stepCounter++;
+                        }
+
+                        packets.forEach((p, idx) => {
+                            p.progress += 0.02;
+                            let currentX = 200 + p.progress * 410;
+                            let currentY = 122 + p.progress * (p.targetY - 122);
+                            ctx.fillStyle = "#fff";
+                            ctx.beginPath();
+                            ctx.arc(currentX, currentY, 4, 0, Math.PI * 2);
+                            ctx.fill();
+                            if (p.progress >= 1) packets.splice(idx, 1);
+                        });
+
+                    } else if (currentAlgo === "sort") {
+                        // Render Sorting
+                        const barWidth = 40;
+                        const gap = 15;
+                        const startX = 60;
+
+                        if (isPlaying && stepCounter % 15 === 0) {
+                            let i = Math.floor(Math.random() * (sortArr.length - 1));
+                            if (sortArr[i] > sortArr[i+1]) {
+                                let temp = sortArr[i];
+                                sortArr[i] = sortArr[i+1];
+                                sortArr[i+1] = temp;
+                            }
+                        }
+                        stepCounter++;
+
+                        sortArr.forEach((val, idx) => {
+                            ctx.fillStyle = (idx % 2 === 0) ? "#00ff66" : "#00b347";
+                            ctx.fillRect(startX + idx * (barWidth + gap), 220 - val, barWidth, val);
+                            ctx.fillStyle = "#fff";
+                            ctx.font = "10px Fira Code";
+                            ctx.fillText(val, startX + idx * (barWidth + gap) + 10, 240);
+                        });
+
+                    } else if (currentAlgo === "mesh") {
+                        // Render Mesh Pathfinding
+                        const gridNodes = [
+                            {x: 100, y: 60, id: "Gateway"},
+                            {x: 250, y: 50, id: "Auth"}, {x: 250, y: 180, id: "Payments"},
+                            {x: 450, y: 80, id: "Orders"}, {x: 450, y: 180, id: "Vault"},
+                            {x: 650, y: 120, id: "Database"}
+                        ];
+
+                        ctx.strokeStyle = "rgba(0, 255, 102, 0.25)";
+                        ctx.lineWidth = 1;
+
+                        // Draw Connections
+                        for(let i=0; i<gridNodes.length; i++) {
+                            for(let j=i+1; j<gridNodes.length; j++) {
+                                ctx.beginPath();
+                                ctx.moveTo(gridNodes[i].x, gridNodes[i].y);
+                                ctx.lineTo(gridNodes[j].x, gridNodes[j].y);
+                                ctx.stroke();
+                            }
+                        }
+
+                        // Highlight Path
+                        ctx.strokeStyle = "#00ff66";
+                        ctx.lineWidth = 2;
+                        const path = [0, 1, 3, 5];
+                        ctx.beginPath();
+                        ctx.moveTo(gridNodes[path[0]].x, gridNodes[path[0]].y);
+                        for(let k=1; k<path.length; k++) {
+                            ctx.lineTo(gridNodes[path[k]].x, gridNodes[path[k]].y);
+                        }
+                        ctx.stroke();
+
+                        gridNodes.forEach((gn, idx) => {
+                            ctx.fillStyle = path.includes(idx) ? "#00ff66" : "#002b11";
+                            ctx.beginPath();
+                            ctx.arc(gn.x, gn.y, 14, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.strokeStyle = "#00ff66";
+                            ctx.stroke();
+
+                            ctx.fillStyle = path.includes(idx) ? "#0a0e14" : "#00ff66";
+                            ctx.font = "10px Fira Code";
+                            ctx.fillText(gn.id, gn.x - 18, gn.y + 3);
+                        });
+                    }
+
+                    if (isPlaying) animId = requestAnimationFrame(loop);
+                }
+                loop();
+            }
+
             const cliInput = document.getElementById("cli-input");
             const cliOutput = document.getElementById("cli-output");
 
             const commands = {
-                help: "Available commands:<br>- <span class='highlight'>istio</span>: Run interactive Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods and Istio sidecars (try <span class='highlight'>-o wide --all-namespaces</span>)<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article by number<br>- <span class='highlight'>linkedin</span>: Open LinkedIn profile<br>- <span class='highlight'>status</span>: Show system metrics<br>- <span class='highlight'>clear</span>: Clear terminal screen",
+                help: "Available commands:<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
                 ls: "0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)",
-                linkedin: "Redirecting to https://www.linkedin.com/in/gregor-otto-huber ...",
-                status: "SYSTEM: NEXTSTOPCLOUD_NODE_01<br>REGION: GERMANY_WEST_CENTRAL (FRANKFURT)<br>SOVEREIGNTY: ENFORCED<br>UPTIME: 99.98%"
+                linkedin: "Redirecting to https://www.linkedin.com/in/gregor-otto-huber ..."
             };
 
             function runIstioDemo() {
@@ -521,6 +716,34 @@
                         cliOutput.scrollTop = cliOutput.scrollHeight;
                     }, delay);
                     delay += (idx === 6 ? 600 : 400);
+                });
+            }
+
+            function runTerraformDemo() {
+                const steps = [
+                    "[TERRAFORM] Initializing AzureRM Provider v3.110.0 (germanywestcentral)...",
+                    "[TERRAFORM] Reading Landing Zone configuration state...",
+                    "[IAC PLAN] 3 resources to add, 0 to change, 0 to destroy.",
+                    "  + azurerm_management_group.sovereign_core",
+                    "  + azurerm_policy_assignment.deny_non_eu_regions",
+                    "  + azurerm_key_vault.kv_enterprise_secrets",
+                    "[POLICY-AS-CODE] Evaluating Azure Policy Guardrails:",
+                    "  ✓ [RULE 01] Allowed Locations: Enforced [germanywestcentral, westeurope]",
+                    "  ✓ [RULE 02] Require Tags: Mandatory [Environment, Owner, CostCenter]",
+                    "  ✓ [RULE 03] Network Isolation: Deny Public IP on Database Services",
+                    "  ✓ [RULE 04] Sovereign Compliance: BSI IT-Grundschutz High Guardrails ACTIVE",
+                    "<span style='color:#00ff66;'>[STATUS] Plan: 3 to add. Governance Policies: 100% COMPLIANT.</span>"
+                ];
+
+                let delay = 250;
+                steps.forEach((stepText) => {
+                    setTimeout(() => {
+                        const stepP = document.createElement("p");
+                        stepP.innerHTML = stepText;
+                        cliOutput.appendChild(stepP);
+                        cliOutput.scrollTop = cliOutput.scrollHeight;
+                    }, delay);
+                    delay += 350;
                 });
             }
 
@@ -577,8 +800,14 @@
 
                     if (lowerInput === "clear") {
                         cliOutput.innerHTML = "";
+                    } else if (lowerInput === "algo" || lowerInput === "visualize" || lowerInput === "algorithms") {
+                        openAlgoModal();
+                        response.innerHTML = "Launching Algorithm Visualizer GUI shell...";
+                        cliOutput.appendChild(response);
                     } else if (lowerInput === "istio") {
                         runIstioDemo();
+                    } else if (lowerInput.startsWith("terraform") || lowerInput === "tf") {
+                        runTerraformDemo();
                     } else if (lowerInput.startsWith("kubectl get pods") || lowerInput.startsWith("kubectl get pod")) {
                         renderKubectl(lowerInput);
                     } else if (lowerInput.startsWith("kubectl") && !lowerInput.startsWith("kubectl get pod")) {
@@ -600,7 +829,7 @@
                         response.innerHTML = commands[lowerInput];
                         cliOutput.appendChild(response);
                     } else if (lowerInput !== "") {
-                        response.innerHTML = `Command not found: <span class="highlight">${input}</span>. Type 'help', 'istio', or 'kubectl get pods' for options.`;
+                        response.innerHTML = `Command not found: <span class="highlight">${input}</span>. Type 'help', 'algo', 'terraform plan', or 'istio'.`;
                         cliOutput.appendChild(response);
                     }
                     cliOutput.scrollTop = cliOutput.scrollHeight;
