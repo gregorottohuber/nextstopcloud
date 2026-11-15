@@ -29,6 +29,7 @@
             --term-green-dim: #00b347;
             --term-green-glow: rgba(0, 255, 102, 0.35);
             --term-dark-green: #002b11;
+            --gemini-blue: #4da6ff;
             --font-stack: 'Fira Code', monospace;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -145,10 +146,12 @@
             font-size: 0.8rem; border-bottom: 1px solid var(--term-green-dim);
             display: flex; justify-content: space-between;
         }
-        .terminal-body { padding: 15px; min-height: 140px; max-height: 250px; overflow-y: auto; font-size: 0.88rem; line-height: 1.45; }
+        .terminal-body { padding: 15px; min-height: 150px; max-height: 280px; overflow-y: auto; font-size: 0.88rem; line-height: 1.45; }
         .highlight { color: #fff; font-weight: bold; }
-        .prompt { color: var(--term-green-dim); margin-right: 8px; }
-        .cli-input-line { display: flex; padding: 8px 15px; border-top: 1px dashed var(--term-dark-green); background-color: #05080c; }
+        .gemini-accent { color: var(--gemini-blue); font-weight: bold; }
+        .prompt { color: var(--term-green-dim); margin-right: 8px; white-space: nowrap; }
+        .gemini-prompt { color: var(--gemini-blue); margin-right: 8px; white-space: nowrap; font-weight: bold; }
+        .cli-input-line { display: flex; align-items: center; padding: 8px 15px; border-top: 1px dashed var(--term-dark-green); background-color: #05080c; }
         .cli-input-line input { background: transparent; border: none; outline: none; color: var(--term-green); font-family: var(--font-stack); font-size: 0.9rem; flex-grow: 1; }
         .terminal-footer { text-align: center; font-size: 0.8rem; color: var(--term-green-dim); border-top: 1px dashed var(--term-green-dim); padding-top: 15px; }
 
@@ -205,9 +208,9 @@
 
         <!-- 1. Interactive Terminal Shell -->
         <section class="interactive-terminal">
-            <div class="terminal-bar"><span class="terminal-title">cli_shell_v2.4.1</span><span>STATUS: ONLINE</span></div>
-            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'algo'</span> for Visualizer, <span class="highlight">'terraform plan'</span> for Policy-as-Code, <span class="highlight">'istio'</span> for mTLS, or <span class="highlight">'kubectl get pods'</span>.</p></div>
-            <div class="cli-input-line"><span class="prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
+            <div class="terminal-bar"><span class="terminal-title" id="shell-title">cli_shell_v2.5.0</span><span id="shell-status">STATUS: ONLINE</span></div>
+            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'npm install -g @google/gemini-cli'</span> to install Gemini CLI, <span class="highlight">'algo'</span> for Visualizer, <span class="highlight">'terraform plan'</span>, or <span class="highlight">'help'</span>.</p></div>
+            <div class="cli-input-line"><span class="prompt" id="cli-prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
         </section>
 
         <!-- 2. Case Studies / Projects Section -->
@@ -547,14 +550,13 @@
             closeAlgoBtn.addEventListener("click", closeAlgoModal);
             algoModal.addEventListener("click", (e) => { if (e.target === algoModal) closeAlgoModal(); });
 
-            // Universal ESC Key Handler for both modals & 1,2,3 hotkeys
+            // Universal ESC Key Handler & 1,2,3 hotkeys
             document.addEventListener("keydown", (e) => {
                 if (e.key === "Escape") {
                     closeModal();
                     closeAlgoModal();
                 }
                 
-                // Hotkeys 1, 2, 3 inside Algorithm Modal
                 if (algoModal.style.display === "flex") {
                     if (e.key === "1") {
                         document.getElementById("btn-algo-lb").click();
@@ -602,7 +604,6 @@
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     
                     if (currentAlgo === "lb") {
-                        // Render Load Balancer
                         ctx.fillStyle = "#00ff66";
                         ctx.font = "12px Fira Code";
                         ctx.fillText("[ Ingress Load Balancer ]", 30, 125);
@@ -634,7 +635,6 @@
                         });
 
                     } else if (currentAlgo === "sort") {
-                        // Render Sorting
                         const barWidth = 40;
                         const gap = 15;
                         const startX = 60;
@@ -658,7 +658,6 @@
                         });
 
                     } else if (currentAlgo === "mesh") {
-                        // Service Mesh Shortest Path
                         const gridNodes = [
                             {x: 80,  y: 125, name: "Ingress"},
                             {x: 240, y: 60,  name: "Auth-v1"},
@@ -672,7 +671,6 @@
                             [0,1], [0,2], [1,3], [2,4], [3,5], [4,5], [1,4], [2,3]
                         ];
 
-                        // Draw Background Mesh Lines
                         ctx.strokeStyle = "rgba(0, 179, 71, 0.3)";
                         ctx.lineWidth = 1;
                         connections.forEach(conn => {
@@ -682,7 +680,6 @@
                             ctx.stroke();
                         });
 
-                        // Active Shortest Path: 0 -> 1 -> 3 -> 5
                         const activePath = [0, 1, 3, 5];
 
                         ctx.strokeStyle = "#00ff66";
@@ -694,7 +691,6 @@
                         }
                         ctx.stroke();
 
-                        // Render Packet along shortest path
                         if (isPlaying) {
                             meshProgress += 0.012;
                             if (meshProgress > 1) meshProgress = 0;
@@ -715,7 +711,6 @@
                         ctx.arc(px, py, 6, 0, Math.PI * 2);
                         ctx.fill();
 
-                        // Draw Node Circles & Labels
                         gridNodes.forEach((gn, idx) => {
                             const isPath = activePath.includes(idx);
                             ctx.fillStyle = isPath ? "#00ff66" : "#002b11";
@@ -738,14 +733,144 @@
                 loop();
             }
 
+            // CLI & Gemini CLI Simulation State
             const cliInput = document.getElementById("cli-input");
             const cliOutput = document.getElementById("cli-output");
+            const cliPrompt = document.getElementById("cli-prompt");
+            const shellTitle = document.getElementById("shell-title");
+            const shellStatus = document.getElementById("shell-status");
+
+            let geminiInstalled = false;
+            let geminiMode = false;
+            let isBusy = false;
 
             const commands = {
-                help: "Available commands:<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer (Hotkeys: 1, 2, 3)<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
+                help: "Available commands:<br>- <span class='highlight'>npm install -g @google/gemini-cli</span>: Install Gemini CLI<br>- <span class='highlight'>gemini</span> (or <span class='highlight'>npx @google/gemini-cli</span>): Launch Gemini CLI agent<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer (Hotkeys: 1, 2, 3)<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
                 ls: "0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)",
                 linkedin: "Redirecting to https://www.linkedin.com/in/gregor-otto-huber ..."
             };
+
+            function appendOutput(html) {
+                const p = document.createElement("p");
+                p.innerHTML = html;
+                cliOutput.appendChild(p);
+                cliOutput.scrollTop = cliOutput.scrollHeight;
+            }
+
+            function installGeminiCLI(autoLaunch = false) {
+                if (geminiInstalled && !autoLaunch) {
+                    appendOutput("<span style='color:#a3e6be;'>@google/gemini-cli@0.4.2 is already installed globally. Run <span class='highlight'>gemini</span> to start.</span>");
+                    return;
+                }
+                isBusy = true;
+                const steps = [
+                    "npm warn deprecated inflight@1.0.6: This module is not supported",
+                    "[NPM] Resolving packages for <span class='highlight'>@google/gemini-cli@latest</span>...",
+                    "[NPM] Fetching @google/genai-core, ink-ui, mcp-client (14.2 MB)...",
+                    "[NPM] Linking binary -> /usr/local/bin/gemini",
+                    "<span style='color:#00ff66;'>added 142 packages in 2.4s</span>",
+                    "Installation complete. Type <span class='highlight'>gemini</span> to launch interactive session."
+                ];
+
+                let delay = 250;
+                steps.forEach((step, idx) => {
+                    setTimeout(() => {
+                        appendOutput(step);
+                        if (idx === steps.length - 1) {
+                            geminiInstalled = true;
+                            isBusy = false;
+                            if (autoLaunch) startGeminiSession();
+                        }
+                    }, delay);
+                    delay += 350;
+                });
+            }
+
+            function startGeminiSession() {
+                isBusy = true;
+                appendOutput("<span class='gemini-accent'>[GEMINI-CLI]</span> Checking credentials (~/.gemini/oauth_creds.json)...");
+                setTimeout(() => {
+                    appendOutput("<span class='gemini-accent'>[AUTH]</span> Authenticated via Google Cloud ADC (Project: <span class='highlight'>nextstopcloud-prod</span>)");
+                }, 400);
+
+                setTimeout(() => {
+                    const banner = `<pre style="color:#4da6ff; margin:8px 0; font-family:var(--font-stack); line-height:1.2;">
+ ✦ GEMINI CLI v0.4.2 (Model: gemini-2.5-pro)
+   Workspace: ~/nextstopcloud.com | Context: GEMINI.md loaded
+   Type your prompt below, <span style="color:#fff;">/help</span> for slash commands, or <span style="color:#fff;">/quit</span> to exit.</pre>`;
+                    appendOutput(banner);
+                    
+                    geminiMode = true;
+                    cliPrompt.textContent = "gemini >";
+                    cliPrompt.className = "gemini-prompt";
+                    shellTitle.textContent = "gemini-cli // interactive-agent";
+                    shellStatus.textContent = "MODEL: GEMINI-2.5-PRO";
+                    shellStatus.style.color = "#4da6ff";
+                    isBusy = false;
+                }, 850);
+            }
+
+            function exitGeminiSession() {
+                geminiMode = false;
+                cliPrompt.textContent = "root@nextstopcloud:~#";
+                cliPrompt.className = "prompt";
+                shellTitle.textContent = "cli_shell_v2.5.0";
+                shellStatus.textContent = "STATUS: ONLINE";
+                shellStatus.style.color = "";
+                appendOutput("Session closed. Returned to standard bash shell.");
+            }
+
+            function handleGeminiPrompt(input) {
+                const lower = input.toLowerCase();
+
+                if (lower === "/quit" || lower === "/exit" || lower === "exit" || lower === "quit") {
+                    exitGeminiSession();
+                    return;
+                }
+                if (lower === "/help") {
+                    appendOutput("<span class='gemini-accent'>Gemini CLI Slash Commands:</span><br>- <span class='highlight'>/auth</span>: Show active authentication & GCP project<br>- <span class='highlight'>/status</span>: Show context window & token cache<br>- <span class='highlight'>/clear</span>: Clear terminal screen<br>- <span class='highlight'>/quit</span>: Exit Gemini CLI and return to shell<br>Or just type any question about cloud architecture, Azure, or this site!");
+                    return;
+                }
+                if (lower === "/auth") {
+                    appendOutput("<span class='gemini-accent'>[AUTH STATUS]</span> Method: OAuth 2.0 (Google Workspace) | Active Project: <span class='highlight'>nextstopcloud-prod</span> | Region: <span class='highlight'>europe-west3 (Frankfurt)</span>");
+                    return;
+                }
+                if (lower === "/status") {
+                    appendOutput("<span class='gemini-accent'>[CONTEXT]</span> Loaded: <code>index.html</code>, <code>GEMINI.md</code> | Tokens cached: 4,120 / 1,000,000 | Sandbox: Active");
+                    return;
+                }
+                if (lower === "/clear") {
+                    cliOutput.innerHTML = "";
+                    return;
+                }
+
+                isBusy = true;
+                const thinkingId = "think-" + Date.now();
+                appendOutput(`<span id="${thinkingId}" class="gemini-accent">✦ Thinking...</span>`);
+
+                setTimeout(() => {
+                    const el = document.getElementById(thinkingId);
+                    if (el) el.remove();
+
+                    let reply = "";
+                    if (lower.includes("sovereign") || lower.includes("delos") || lower.includes("bsi")) {
+                        reply = "Sovereign Cloud architectures in Germany combine regional data residency (e.g., Germany West Central), Customer-Managed Keys (CMK/DKE), and hardware-level Confidential Computing (AMD SEV-SNP) to meet strict BSI IT-Grundschutz standards. Check <span class='highlight'>cat 1</span> for the full deep-dive.";
+                    } else if (lower.includes("azure") || lower.includes("landing zone") || lower.includes("terraform")) {
+                        reply = "Automated Azure Landing Zones enforce governance at scale using Management Group hierarchies and Policy-as-Code via Terraform—preventing non-compliant deployments before they happen. Check <span class='highlight'>cat 3</span> for the Terraform blueprint.";
+                    } else if (lower.includes("istio") || lower.includes("mesh") || lower.includes("mtls")) {
+                        reply = "Istio enforces Zero Trust inside Kubernetes clusters by injecting Envoy sidecars that handle automatic mTLS encryption and SPIFFE identity verification between microservices.";
+                    } else if (lower.includes("who") || lower.includes("gregor") || lower.includes("author")) {
+                        reply = "This terminal portfolio is built and maintained by <span class='highlight'>Gregor Otto Huber</span>, focusing on Sovereign Cloud, Enterprise Cloud Architecture, Security, and AI.";
+                    } else if (lower.includes("hello") || lower.includes("hi") || lower.includes("hallo")) {
+                        reply = "Hello! I'm your simulated Gemini CLI agent inside nextstopcloud.com. Ask me about <span class='highlight'>Sovereign Cloud</span>, <span class='highlight'>Azure Landing Zones</span>, or <span class='highlight'>Istio</span>—or type <span class='highlight'>/quit</span> to go back.";
+                    } else {
+                        reply = `Analyzed query: <em>"${input}"</em>.<br>In a live workspace, Gemini CLI inspects local files, executes shell tools in a sandbox, and correlates context via <code>GEMINI.md</code>. Try asking about <span class='highlight'>sovereign cloud</span>, <span class='highlight'>terraform</span>, or <span class='highlight'>istio</span>, or type <span class='highlight'>/quit</span> to return.`;
+                    }
+
+                    appendOutput(`<span class="gemini-accent">✦ Gemini:</span> ${reply}`);
+                    isBusy = false;
+                }, 650);
+            }
 
             function runIstioDemo() {
                 const steps = [
@@ -762,10 +887,7 @@
                 let delay = 300;
                 steps.forEach((stepText, idx) => {
                     setTimeout(() => {
-                        const stepP = document.createElement("p");
-                        stepP.innerHTML = stepText;
-                        cliOutput.appendChild(stepP);
-                        cliOutput.scrollTop = cliOutput.scrollHeight;
+                        appendOutput(stepText);
                     }, delay);
                     delay += (idx === 6 ? 600 : 400);
                 });
@@ -790,10 +912,7 @@
                 let delay = 250;
                 steps.forEach((stepText) => {
                     setTimeout(() => {
-                        const stepP = document.createElement("p");
-                        stepP.innerHTML = stepText;
-                        cliOutput.appendChild(stepP);
-                        cliOutput.scrollTop = cliOutput.scrollHeight;
+                        appendOutput(stepText);
                     }, delay);
                     delay += 350;
                 });
@@ -833,29 +952,50 @@
                     }
                 }
 
-                const responseP = document.createElement("p");
-                responseP.innerHTML = `<pre style="color:#00ff66; line-height: 1.4; font-family:var(--font-stack); font-size:0.75rem; margin:8px 0; overflow-x:auto;">${output}</pre>`;
-                cliOutput.appendChild(responseP);
-                cliOutput.scrollTop = cliOutput.scrollHeight;
+                appendOutput(`<pre style="color:#00ff66; line-height: 1.4; font-family:var(--font-stack); font-size:0.75rem; margin:8px 0; overflow-x:auto;">${output}</pre>`);
             }
 
             cliInput.addEventListener("keydown", (e) => {
                 if (e.key === "Enter") {
+                    if (isBusy) return;
                     const input = cliInput.value.trim();
                     cliInput.value = "";
+                    if (!input) return;
+
                     const lowerInput = input.toLowerCase();
+
+                    if (geminiMode) {
+                        appendOutput(`<span class="gemini-prompt">gemini &gt;</span> ${input}`);
+                        handleGeminiPrompt(input);
+                        return;
+                    }
                     
-                    const p = document.createElement("p");
-                    p.innerHTML = `<span class="prompt">root@nextstopcloud:~#</span> ${input}`;
-                    cliOutput.appendChild(p);
-                    const response = document.createElement("p");
+                    appendOutput(`<span class="prompt">root@nextstopcloud:~#</span> ${input}`);
 
                     if (lowerInput === "clear") {
                         cliOutput.innerHTML = "";
+                    } else if (
+                        lowerInput === "npm install -g @google/gemini-cli" ||
+                        lowerInput === "npm i -g @google/gemini-cli" ||
+                        lowerInput === "brew install gemini-cli" ||
+                        lowerInput === "install gemini"
+                    ) {
+                        installGeminiCLI(false);
+                    } else if (lowerInput === "npx @google/gemini-cli") {
+                        if (!geminiInstalled) {
+                            installGeminiCLI(true);
+                        } else {
+                            startGeminiSession();
+                        }
+                    } else if (lowerInput === "gemini") {
+                        if (!geminiInstalled) {
+                            appendOutput(`bash: gemini: command not found.<br>Install it first via: <span class="highlight">npm install -g @google/gemini-cli</span> (or run directly with <span class="highlight">npx @google/gemini-cli</span>)`);
+                        } else {
+                            startGeminiSession();
+                        }
                     } else if (lowerInput === "algo" || lowerInput === "visualize" || lowerInput === "algorithms") {
                         openAlgoModal();
-                        response.innerHTML = "Launching Algorithm Visualizer GUI shell... (Use keys 1, 2, 3 to switch)";
-                        cliOutput.appendChild(response);
+                        appendOutput("Launching Algorithm Visualizer GUI shell... (Use keys 1, 2, 3 to switch)");
                     } else if (lowerInput === "istio") {
                         runIstioDemo();
                     } else if (lowerInput.startsWith("terraform") || lowerInput === "tf") {
@@ -863,28 +1003,22 @@
                     } else if (lowerInput.startsWith("kubectl get pods") || lowerInput.startsWith("kubectl get pod")) {
                         renderKubectl(lowerInput);
                     } else if (lowerInput.startsWith("kubectl") && !lowerInput.startsWith("kubectl get pod")) {
-                        response.innerHTML = "Mock Terminal supports: <span class='highlight'>kubectl get pods</span> (flags: <span class='highlight'>-A</span>, <span class='highlight'>--all-namespaces</span>, <span class='highlight'>-o wide</span>).";
-                        cliOutput.appendChild(response);
+                        appendOutput("Mock Terminal supports: <span class='highlight'>kubectl get pods</span> (flags: <span class='highlight'>-A</span>, <span class='highlight'>--all-namespaces</span>, <span class='highlight'>-o wide</span>).");
                     } else if (lowerInput.startsWith("cat ")) {
                         const num = lowerInput.split(" ")[1];
                         const map = {"1":"sovereign-cloud", "2":"keyvault-powerplatform", "3":"landing-zones", "4":"confidential-computing"};
-                        if(map[num]) { openArticle(map[num]); response.innerHTML = `Opening article 0x0${num} ...`; }
-                        else { response.innerHTML = "Article not found."; }
-                        cliOutput.appendChild(response);
+                        if(map[num]) { openArticle(map[num]); appendOutput(`Opening article 0x0${num} ...`); }
+                        else { appendOutput("Article not found."); }
                     } else if (lowerInput === "linkedin") {
-                        response.innerHTML = commands.linkedin;
-                        cliOutput.appendChild(response);
+                        appendOutput(commands.linkedin);
                         setTimeout(() => {
                             window.open("https://www.linkedin.com/in/gregor-otto-huber", "_blank");
                         }, 800);
                     } else if (commands[lowerInput]) {
-                        response.innerHTML = commands[lowerInput];
-                        cliOutput.appendChild(response);
-                    } else if (lowerInput !== "") {
-                        response.innerHTML = `Command not found: <span class="highlight">${input}</span>. Type 'help', 'algo', 'terraform plan', or 'istio'.`;
-                        cliOutput.appendChild(response);
+                        appendOutput(commands[lowerInput]);
+                    } else {
+                        appendOutput(`Command not found: <span class="highlight">${input}</span>. Type 'help', 'npm install -g @google/gemini-cli', 'algo', or 'terraform plan'.`);
                     }
-                    cliOutput.scrollTop = cliOutput.scrollHeight;
                 }
             });
         });
