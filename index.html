@@ -199,12 +199,13 @@
         .article-content li { margin-bottom: 8px; }
         .article-content pre { background-color: #05080c; border: 1px solid var(--term-dark-green); padding: 15px; overflow-x: auto; color: var(--term-green); font-family: var(--font-stack); font-size: 0.85rem; margin: 20px 0; }
 
-        /* Algorithm Visualizer Styles */
+        /* Algorithm Visualizer & Game Styles */
         .algo-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; align-items: center; }
         .algo-btn { background: transparent; border: 1px solid var(--term-green-dim); color: var(--term-green); padding: 5px 12px; cursor: pointer; font-family: var(--font-stack); font-size: 0.85rem; }
         .algo-btn:hover, .algo-btn.active { background-color: var(--term-green); color: var(--bg-color); }
         .canvas-area { border: 1px solid var(--term-dark-green); background-color: #05080c; width: 100%; height: 260px; position: relative; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         canvas { width: 100%; height: 100%; display: block; }
+        .game-hud { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 0.9rem; color: var(--term-green); flex-wrap: wrap; gap: 10px; }
     </style>
 </head>
 <body class="crt">
@@ -227,8 +228,8 @@
 
         <!-- 1. Interactive Terminal Shell -->
         <section class="interactive-terminal">
-            <div class="terminal-bar"><span class="terminal-title" id="shell-title">cli_shell_v2.5.1</span><span id="shell-status">STATUS: ONLINE</span></div>
-            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'install Gemini'</span> to install Gemini CLI, <span class="highlight">'algo'</span> for Visualizer, <span class="highlight">'terraform plan'</span>, or <span class="highlight">'help'</span>.</p></div>
+            <div class="terminal-bar"><span class="terminal-title" id="shell-title">cli_shell_v2.6.0</span><span id="shell-status">STATUS: ONLINE</span></div>
+            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'install Gemini'</span> to install Gemini CLI, <span class="highlight">'christmas'</span> for Reindeer Run, <span class="highlight">'algo'</span> for Visualizer, or <span class="highlight">'help'</span>.</p></div>
             <div class="cli-input-line"><span class="prompt" id="cli-prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
         </section>
 
@@ -319,6 +320,26 @@
             </div>
             <div id="algo-status" style="font-size: 0.85rem; color: var(--term-green-dim);">
                 Selected: Round-Robin Load Balancing across 4 worker pods.
+            </div>
+        </div>
+    </div>
+
+    <!-- Christmas Reindeer Run Game Modal -->
+    <div class="modal-overlay" id="xmas-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <span><span class="xmas-badge">❄</span> RUDOLPH_RUNNER_V1.0 // XMAS_EDITION</span>
+                <button class="close-btn" id="close-xmas-modal">[ESC / CLOSE]</button>
+            </div>
+            <div class="game-hud">
+                <span>CONTROLS: <span class="highlight">[SPACE]</span> or <span class="highlight">[↑]</span> to Jump</span>
+                <span>SCORE: <span class="highlight" id="xmas-score">0000</span> | BEST: <span class="xmas-badge" id="xmas-best">0000</span></span>
+            </div>
+            <div class="canvas-area" style="cursor: pointer;" id="xmas-canvas-wrap">
+                <canvas id="xmasCanvas" width="780" height="250"></canvas>
+            </div>
+            <div id="xmas-status" style="font-size: 0.85rem; color: var(--term-green-dim);">
+                Dodge the pine trees! Press SPACE or UP ARROW to leap.
             </div>
         </div>
     </div>
@@ -626,11 +647,298 @@
             closeAlgoBtn.addEventListener("click", closeAlgoModal);
             algoModal.addEventListener("click", (e) => { if (e.target === algoModal) closeAlgoModal(); });
 
-            // Universal Keyboard Handler (ESC, Arrow Scrolling in Reader, 1-2-3 in Visualizer)
+            // Christmas Reindeer Runner Game Logic
+            const xmasModal = document.getElementById("xmas-modal");
+            const closeXmasBtn = document.getElementById("close-xmas-modal");
+            const xmasCanvas = document.getElementById("xmasCanvas");
+            const xmasCtx = xmasCanvas.getContext("2d");
+            const xmasScoreEl = document.getElementById("xmas-score");
+            const xmasBestEl = document.getElementById("xmas-best");
+            const xmasStatusEl = document.getElementById("xmas-status");
+
+            let xmasAnimId = null;
+            let gameOver = false;
+            let gameScore = 0;
+            let bestScore = 0;
+            let gameSpeed = 5.2;
+            let spawnTimer = 0;
+            let nextSpawnIn = 75;
+            let groundOffset = 0;
+            let trees = [];
+
+            const reindeer = {
+                x: 80,
+                y: 170,
+                width: 34,
+                height: 36,
+                vy: 0,
+                gravity: 0.65,
+                jumpPower: -12.2,
+                groundY: 170,
+                isJumping: false,
+                legFrame: 0
+            };
+
+            function resetXmasGame() {
+                gameOver = false;
+                gameScore = 0;
+                gameSpeed = 5.2;
+                spawnTimer = 0;
+                nextSpawnIn = 70;
+                trees = [];
+                reindeer.y = reindeer.groundY;
+                reindeer.vy = 0;
+                reindeer.isJumping = false;
+                xmasScoreEl.textContent = "0000";
+                xmasStatusEl.textContent = "Running through the winter cloud forest... Press SPACE or ↑ to jump!";
+            }
+
+            function jumpReindeer() {
+                if (gameOver) {
+                    resetXmasGame();
+                    return;
+                }
+                if (!reindeer.isJumping) {
+                    reindeer.vy = reindeer.jumpPower;
+                    reindeer.isJumping = true;
+                }
+            }
+
+            function openXmasModal() {
+                xmasModal.style.display = "flex";
+                document.body.style.overflow = "hidden";
+                if (document.activeElement) document.activeElement.blur();
+                resetXmasGame();
+                startXmasLoop();
+            }
+
+            function closeXmasModal() {
+                if (xmasModal.style.display === "flex") {
+                    xmasModal.style.display = "none";
+                    document.body.style.overflow = "auto";
+                    if (xmasAnimId) cancelAnimationFrame(xmasAnimId);
+                    setTimeout(() => cliInput.focus(), 10);
+                }
+            }
+
+            closeXmasBtn.addEventListener("click", closeXmasModal);
+            xmasModal.addEventListener("click", (e) => { if (e.target === xmasModal) closeXmasModal(); });
+            document.getElementById("xmas-canvas-wrap").addEventListener("click", jumpReindeer);
+
+            function drawPineTree(ctx, x, groundY, h, w) {
+                const trunkW = Math.max(6, Math.floor(w * 0.24));
+                const trunkH = Math.max(8, Math.floor(h * 0.2));
+                // Trunk
+                ctx.fillStyle = "#00b347";
+                ctx.fillRect(x + (w - trunkW) / 2, groundY - trunkH, trunkW, trunkH);
+
+                // Three layered pine tiers
+                const treeTop = groundY - h;
+                const bodyH = h - trunkH;
+                ctx.fillStyle = "#00ff66";
+                for (let tier = 0; tier < 3; tier++) {
+                    const tierTop = treeTop + tier * (bodyH * 0.26);
+                    const tierBottom = treeTop + (tier + 1.35) * (bodyH * 0.34);
+                    const tierHalfW = (w * 0.28) + tier * (w * 0.12);
+                    const cx = x + w / 2;
+
+                    ctx.beginPath();
+                    ctx.moveTo(cx, tierTop);
+                    ctx.lineTo(cx - tierHalfW, Math.min(groundY - trunkH, tierBottom));
+                    ctx.lineTo(cx + tierHalfW, Math.min(groundY - trunkH, tierBottom));
+                    ctx.closePath();
+                    ctx.fill();
+                }
+
+                // Red ornament dot on tree
+                ctx.fillStyle = "#ff4d4d";
+                ctx.beginPath();
+                ctx.arc(x + w * 0.45, groundY - h * 0.48, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            function drawReindeer(ctx, r) {
+                const x = r.x;
+                const y = r.y;
+
+                // Antlers
+                ctx.strokeStyle = "#00b347";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(x + 22, y + 6);
+                ctx.lineTo(x + 20, y - 6);
+                ctx.moveTo(x + 20, y - 2);
+                ctx.lineTo(x + 15, y - 5);
+                ctx.moveTo(x + 25, y + 6);
+                ctx.lineTo(x + 27, y - 7);
+                ctx.moveTo(x + 27, y - 2);
+                ctx.lineTo(x + 32, y - 5);
+                ctx.stroke();
+
+                // Tail
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(x - 3, y + 14, 4, 4);
+
+                // Body
+                ctx.fillStyle = "#00ff66";
+                ctx.fillRect(x, y + 14, 24, 12);
+
+                // Neck & Head
+                ctx.fillRect(x + 18, y + 5, 8, 12);
+                ctx.fillRect(x + 20, y + 4, 14, 9);
+
+                // Glowing Red Nose (Rudolph!)
+                ctx.fillStyle = "#ff4d4d";
+                ctx.beginPath();
+                ctx.arc(x + 35, y + 8, 3.2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Eye
+                ctx.fillStyle = "#0a0e14";
+                ctx.fillRect(x + 26, y + 6, 2, 2);
+
+                // Animated Legs
+                ctx.fillStyle = "#00ff66";
+                const stride = r.isJumping ? 3 : Math.sin(r.legFrame * 0.35) * 4;
+                ctx.fillRect(x + 3 + stride, y + 26, 3, 10);
+                ctx.fillRect(x + 8 - stride, y + 26, 3, 10);
+                ctx.fillRect(x + 16 - stride, y + 26, 3, 10);
+                ctx.fillRect(x + 21 + stride, y + 26, 3, 10);
+            }
+
+            function startXmasLoop() {
+                if (xmasAnimId) cancelAnimationFrame(xmasAnimId);
+
+                function gameLoop() {
+                    xmasCtx.clearRect(0, 0, xmasCanvas.width, xmasCanvas.height);
+                    const floorY = 206;
+
+                    // Subtle background stars
+                    xmasCtx.fillStyle = "rgba(0, 255, 102, 0.25)";
+                    for (let s = 0; s < 14; s++) {
+                        const sx = (s * 67 + Math.floor(groundOffset * 0.2)) % xmasCanvas.width;
+                        const sy = 24 + (s * 19) % 85;
+                        xmasCtx.fillRect(xmasCanvas.width - sx, sy, 2, 2);
+                    }
+
+                    // Ground line & scrolling snow dashes
+                    xmasCtx.strokeStyle = "#00b347";
+                    xmasCtx.lineWidth = 1.5;
+                    xmasCtx.beginPath();
+                    xmasCtx.moveTo(0, floorY);
+                    xmasCtx.lineTo(xmasCanvas.width, floorY);
+                    xmasCtx.stroke();
+
+                    xmasCtx.fillStyle = "#00b347";
+                    for (let gx = - (groundOffset % 40); gx < xmasCanvas.width; gx += 40) {
+                        xmasCtx.fillRect(gx, floorY + 7, 14, 2);
+                        xmasCtx.fillRect(gx + 22, floorY + 14, 6, 2);
+                    }
+
+                    if (!gameOver) {
+                        // Physics
+                        reindeer.vy += reindeer.gravity;
+                        reindeer.y += reindeer.vy;
+                        if (reindeer.y >= reindeer.groundY) {
+                            reindeer.y = reindeer.groundY;
+                            reindeer.vy = 0;
+                            reindeer.isJumping = false;
+                        }
+                        reindeer.legFrame++;
+                        groundOffset += gameSpeed;
+
+                        // Score & progressive speed
+                        gameScore += 0.25;
+                        const displayScore = Math.floor(gameScore);
+                        xmasScoreEl.textContent = String(displayScore).padStart(4, "0");
+                        if (displayScore > bestScore) {
+                            bestScore = displayScore;
+                            xmasBestEl.textContent = String(bestScore).padStart(4, "0");
+                        }
+                        gameSpeed = Math.min(11.5, 5.2 + displayScore * 0.004);
+
+                        // Spawn pine trees
+                        spawnTimer++;
+                        if (spawnTimer >= nextSpawnIn) {
+                            const treeH = 34 + Math.floor(Math.random() * 24);
+                            const treeW = 24 + Math.floor(Math.random() * 10);
+                            trees.push({ x: xmasCanvas.width + 20, h: treeH, w: treeW });
+                            spawnTimer = 0;
+                            nextSpawnIn = Math.max(44, Math.floor(62 + Math.random() * 48 - gameSpeed * 2));
+                        }
+
+                        // Move trees & check collision
+                        for (let i = trees.length - 1; i >= 0; i--) {
+                            const t = trees[i];
+                            t.x -= gameSpeed;
+
+                            // Forgiving hitbox
+                            const pad = 6;
+                            const rx1 = reindeer.x + pad;
+                            const rx2 = reindeer.x + reindeer.width - pad;
+                            const ry1 = reindeer.y + pad;
+                            const ry2 = reindeer.y + reindeer.height - 2;
+
+                            const tx1 = t.x + 5;
+                            const tx2 = t.x + t.w - 5;
+                            const ty1 = floorY - t.h + 6;
+                            const ty2 = floorY;
+
+                            if (rx1 < tx2 && rx2 > tx1 && ry1 < ty2 && ry2 > ty1) {
+                                gameOver = true;
+                                xmasStatusEl.innerHTML = `<span class="xmas-badge">CRASHED INTO A PINE TREE!</span> Final Score: <span class="highlight">${displayScore}</span> — Press <span class="highlight">[SPACE]</span> to play again.`;
+                            }
+
+                            if (t.x + t.w < -20) {
+                                trees.splice(i, 1);
+                            }
+                        }
+                    }
+
+                    // Draw obstacles & player
+                    trees.forEach(t => drawPineTree(xmasCtx, t.x, floorY, t.h, t.w));
+                    drawReindeer(xmasCtx, reindeer);
+
+                    // Game Over Overlay Banner
+                    if (gameOver) {
+                        xmasCtx.fillStyle = "rgba(10, 14, 20, 0.82)";
+                        xmasCtx.fillRect(210, 72, 360, 82);
+                        xmasCtx.strokeStyle = "#ff4d4d";
+                        xmasCtx.lineWidth = 1.5;
+                        xmasCtx.strokeRect(210, 72, 360, 82);
+
+                        xmasCtx.fillStyle = "#ff4d4d";
+                        xmasCtx.font = "bold 16px Fira Code";
+                        xmasCtx.fillText("GAME OVER // TREE COLLISION", 252, 104);
+
+                        xmasCtx.fillStyle = "#00ff66";
+                        xmasCtx.font = "12px Fira Code";
+                        xmasCtx.fillText("Press [SPACE] or [ENTER] to restart", 256, 132);
+                    }
+
+                    xmasAnimId = requestAnimationFrame(gameLoop);
+                }
+                gameLoop();
+            }
+
+            // Universal Keyboard Handler (ESC, Xmas Game Controls, Arrow Scrolling in Reader, 1-2-3 in Visualizer)
             document.addEventListener("keydown", (e) => {
                 if (e.key === "Escape") {
                     closeModal();
                     closeAlgoModal();
+                    closeXmasModal();
+                    return;
+                }
+
+                // Controls inside Christmas Reindeer Game
+                if (xmasModal.style.display === "flex") {
+                    if (e.code === "Space" || e.key === " " || e.key === "ArrowUp") {
+                        e.preventDefault();
+                        jumpReindeer();
+                    } else if (e.key === "Enter" && gameOver) {
+                        e.preventDefault();
+                        resetXmasGame();
+                    }
                     return;
                 }
 
@@ -839,7 +1147,7 @@
             let isBusy = false;
 
             const commands = {
-                help: "Available commands:<br>- <span class='highlight'>install Gemini</span>: Install Gemini CLI<br>- <span class='highlight'>gemini</span> (or <span class='highlight'>npx @google/gemini-cli</span>): Launch Gemini CLI agent<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer (Hotkeys: 1, 2, 3)<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article<br>- <span class='highlight'>snow</span>: Toggle snowfall effect<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
+                help: "Available commands:<br>- <span class='highlight'>christmas</span> (or <span class='highlight'>xmas</span>): Play Reindeer Runner mini-game ❄<br>- <span class='highlight'>install Gemini</span>: Install Gemini CLI<br>- <span class='highlight'>gemini</span> (or <span class='highlight'>npx @google/gemini-cli</span>): Launch Gemini CLI agent<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer (Hotkeys: 1, 2, 3)<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article<br>- <span class='highlight'>snow</span>: Toggle snowfall effect<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
                 ls: "0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)",
                 linkedin: "Redirecting to https://www.linkedin.com/in/gregor-otto-huber ..."
             };
@@ -908,7 +1216,7 @@
                 geminiMode = false;
                 cliPrompt.textContent = "root@nextstopcloud:~#";
                 cliPrompt.className = "prompt";
-                shellTitle.textContent = "cli_shell_v2.5.1";
+                shellTitle.textContent = "cli_shell_v2.6.0";
                 shellStatus.textContent = "STATUS: ONLINE";
                 shellStatus.style.color = "";
                 appendOutput("Session closed. Returned to standard bash shell.");
@@ -1068,6 +1376,9 @@
 
                     if (lowerInput === "clear") {
                         cliOutput.innerHTML = "";
+                    } else if (lowerInput === "christmas" || lowerInput === "xmas" || lowerInput === "reindeer") {
+                        openXmasModal();
+                        appendOutput("Launching Rudolph Runner (Christmas Edition)... Use [SPACE] or [↑] to jump!");
                     } else if (lowerInput === "snow") {
                         snowEnabled = !snowEnabled;
                         appendOutput(`Winter snowfall effect: <span class="highlight">${snowEnabled ? "ENABLED ❄" : "DISABLED"}</span>`);
@@ -1114,7 +1425,7 @@
                     } else if (commands[lowerInput]) {
                         appendOutput(commands[lowerInput]);
                     } else {
-                        appendOutput(`Command not found: <span class="highlight">${input}</span>. Type 'help', 'install Gemini', 'algo', or 'terraform plan'.`);
+                        appendOutput(`Command not found: <span class="highlight">${input}</span>. Type 'help', 'christmas', 'install Gemini', 'algo', or 'terraform plan'.`);
                     }
                 }
             });
