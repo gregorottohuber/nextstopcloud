@@ -29,6 +29,8 @@
             --term-green-dim: #00b347;
             --term-green-glow: rgba(0, 255, 102, 0.35);
             --term-dark-green: #002b11;
+            --xmas-red: #ff4d4d;
+            --xmas-red-dim: rgba(255, 77, 77, 0.45);
             --gemini-blue: #4da6ff;
             --font-stack: 'Fira Code', monospace;
         }
@@ -41,6 +43,15 @@
             padding: 20px;
             display: flex;
             justify-content: center;
+        }
+        #snow-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 998;
         }
         .scanline {
             width: 100%; height: 3px;
@@ -55,17 +66,22 @@
             max-width: 920px; width: 100%;
             border: 1px solid var(--term-green-dim);
             padding: 25px;
-            box-shadow: 0 0 25px var(--term-green-glow);
-            background-color: rgba(10, 14, 20, 0.98);
+            box-shadow: 0 0 25px var(--term-green-glow), inset 0 0 18px rgba(255, 77, 77, 0.06);
+            background-color: rgba(10, 14, 20, 0.96);
+            position: relative;
+            z-index: 1;
         }
         .terminal-header {
-            border-bottom: 1px dashed var(--term-green-dim);
+            border-bottom: 1px dashed var(--xmas-red-dim);
             padding-bottom: 15px; margin-bottom: 25px;
         }
         .sys-info {
             display: flex; justify-content: space-between;
             font-size: 0.8rem; color: var(--term-green-dim);
             margin-bottom: 15px; flex-wrap: wrap; gap: 10px;
+        }
+        .xmas-badge {
+            color: var(--xmas-red);
         }
         .ascii-art {
             font-size: 0.62rem; line-height: 1.2;
@@ -77,6 +93,7 @@
             display: flex; justify-content: space-between; align-items: center;
             background-color: rgba(0, 43, 17, 0.3);
             border: 1px solid var(--term-dark-green);
+            border-left: 3px solid var(--xmas-red);
             padding: 12px 16px; margin-bottom: 25px; font-size: 0.88rem;
         }
         .profile-link {
@@ -90,7 +107,7 @@
         }
         .section-title {
             font-size: 0.95rem; color: var(--term-green-dim);
-            margin-bottom: 12px; border-bottom: 1px solid var(--term-dark-green);
+            margin-bottom: 12px; border-bottom: 1px dashed var(--xmas-red-dim);
             padding-bottom: 4px;
         }
         .case-studies-container { margin-bottom: 30px; }
@@ -102,8 +119,9 @@
             flex-wrap: wrap; gap: 10px; transition: all 0.2s ease;
         }
         .case-study-card:hover {
-            border-style: solid; background-color: rgba(0, 43, 17, 0.25);
-            box-shadow: 0 0 10px rgba(0, 255, 102, 0.1);
+            border-style: solid; border-color: var(--xmas-red);
+            background-color: rgba(0, 43, 17, 0.25);
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.14);
         }
         .case-study-info { flex: 1; min-width: 250px; }
         .case-study-title { color: var(--term-green); font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
@@ -143,7 +161,7 @@
         .interactive-terminal { border: 1px solid var(--term-green-dim); background-color: #05080c; margin-bottom: 30px; }
         .terminal-bar {
             background-color: var(--term-dark-green); padding: 6px 12px;
-            font-size: 0.8rem; border-bottom: 1px solid var(--term-green-dim);
+            font-size: 0.8rem; border-bottom: 1px solid var(--xmas-red-dim);
             display: flex; justify-content: space-between;
         }
         .terminal-body { padding: 15px; min-height: 150px; max-height: 280px; overflow-y: auto; font-size: 0.88rem; line-height: 1.45; }
@@ -153,7 +171,7 @@
         .gemini-prompt { color: var(--gemini-blue); margin-right: 8px; white-space: nowrap; font-weight: bold; }
         .cli-input-line { display: flex; align-items: center; padding: 8px 15px; border-top: 1px dashed var(--term-dark-green); background-color: #05080c; }
         .cli-input-line input { background: transparent; border: none; outline: none; color: var(--term-green); font-family: var(--font-stack); font-size: 0.9rem; flex-grow: 1; }
-        .terminal-footer { text-align: center; font-size: 0.8rem; color: var(--term-green-dim); border-top: 1px dashed var(--term-green-dim); padding-top: 15px; }
+        .terminal-footer { text-align: center; font-size: 0.8rem; color: var(--term-green-dim); border-top: 1px dashed var(--xmas-red-dim); padding-top: 15px; }
 
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -168,12 +186,12 @@
         }
         .modal-header {
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px dashed var(--term-green-dim); padding-bottom: 15px; margin-bottom: 20px;
+            border-bottom: 1px dashed var(--xmas-red-dim); padding-bottom: 15px; margin-bottom: 20px;
             flex-shrink: 0;
         }
         .close-btn { background: transparent; border: 1px solid var(--term-green); color: var(--term-green); padding: 6px 14px; font-family: var(--font-stack); cursor: pointer; }
         .close-btn:hover { background-color: var(--term-green); color: var(--bg-color); }
-        .article-content { overflow-y: auto; padding-right: 15px; flex-grow: 1; }
+        .article-content { overflow-y: auto; padding-right: 15px; flex-grow: 1; outline: none; }
         .article-content h1 { color: var(--term-green); font-size: 1.5rem; margin-bottom: 15px; line-height: 1.3; }
         .article-content h2 { color: var(--term-green); font-size: 1.2rem; margin-top: 22px; margin-bottom: 10px; border-bottom: 1px solid var(--term-dark-green); padding-bottom: 5px; }
         .article-content p { margin-bottom: 16px; color: #d1d5db; font-size: 0.95rem; }
@@ -190,10 +208,11 @@
     </style>
 </head>
 <body class="crt">
+    <canvas id="snow-canvas"></canvas>
     <div class="scanline"></div>
     <div class="terminal-container">
         <header class="terminal-header">
-            <div class="sys-info"><span>SYS_UPTIME: 99.98%</span><span>LOC: DE-FRA</span><span>SEC_LEVEL: SOVEREIGN</span></div>
+            <div class="sys-info"><span>SYS_UPTIME: 99.98%</span><span>LOC: DE-FRA</span><span class="xmas-badge">❄ SEASON: WINTER_2026</span><span>SEC_LEVEL: SOVEREIGN</span></div>
             <pre class="ascii-art">
  _  _ ____ _  _ ___ ____ ___ ____ ___  ____ _    ____ _  _ ___  
  |\ | |___  \/   |  [__   |  |  | |__] |    |    |  | |  | |  \ 
@@ -208,8 +227,8 @@
 
         <!-- 1. Interactive Terminal Shell -->
         <section class="interactive-terminal">
-            <div class="terminal-bar"><span class="terminal-title" id="shell-title">cli_shell_v2.5.0</span><span id="shell-status">STATUS: ONLINE</span></div>
-            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'npm install -g @google/gemini-cli'</span> to install Gemini CLI, <span class="highlight">'algo'</span> for Visualizer, <span class="highlight">'terraform plan'</span>, or <span class="highlight">'help'</span>.</p></div>
+            <div class="terminal-bar"><span class="terminal-title" id="shell-title">cli_shell_v2.5.1</span><span id="shell-status">STATUS: ONLINE</span></div>
+            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'install Gemini'</span> to install Gemini CLI, <span class="highlight">'algo'</span> for Visualizer, <span class="highlight">'terraform plan'</span>, or <span class="highlight">'help'</span>.</p></div>
             <div class="cli-input-line"><span class="prompt" id="cli-prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
         </section>
 
@@ -271,14 +290,14 @@
             </article>
         </main>
 
-        <footer class="terminal-footer"><p>&copy; 2026 nextstopcloud.com // Gregor Otto Huber // All systems nominal.</p></footer>
+        <footer class="terminal-footer"><p>&copy; 2026 nextstopcloud.com // Gregor Otto Huber // <span class="xmas-badge">❄</span> Season's Greetings &amp; All systems nominal.</p></footer>
     </div>
 
     <!-- Reader Modal -->
     <div class="modal-overlay" id="reader-modal">
         <div class="modal-container">
             <div class="modal-header"><span>READER_SHELL_V1.0</span><button class="close-btn" id="close-modal">[ESC / CLOSE]</button></div>
-            <div class="article-content" id="article-body"></div>
+            <div class="article-content" id="article-body" tabindex="0"></div>
         </div>
     </div>
 
@@ -487,6 +506,53 @@
         };
 
         document.addEventListener("DOMContentLoaded", () => {
+            // Subtle Winter Snowfall Animation
+            const snowCanvas = document.getElementById("snow-canvas");
+            const snowCtx = snowCanvas.getContext("2d");
+            let snowEnabled = true;
+            let flakes = [];
+
+            function resizeSnow() {
+                snowCanvas.width = window.innerWidth;
+                snowCanvas.height = window.innerHeight;
+            }
+            resizeSnow();
+            window.addEventListener("resize", resizeSnow);
+
+            const glyphs = ["*", "·", "❄", "+"];
+            for (let i = 0; i < 42; i++) {
+                flakes.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    speed: 0.4 + Math.random() * 0.9,
+                    drift: (Math.random() - 0.5) * 0.4,
+                    size: 10 + Math.floor(Math.random() * 6),
+                    glyph: glyphs[Math.floor(Math.random() * glyphs.length)],
+                    alpha: 0.18 + Math.random() * 0.32
+                });
+            }
+
+            function renderSnow() {
+                snowCtx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
+                if (snowEnabled) {
+                    flakes.forEach(f => {
+                        snowCtx.fillStyle = `rgba(210, 255, 228, ${f.alpha})`;
+                        snowCtx.font = `${f.size}px Fira Code, monospace`;
+                        snowCtx.fillText(f.glyph, f.x, f.y);
+                        f.y += f.speed;
+                        f.x += f.drift;
+                        if (f.y > snowCanvas.height) {
+                            f.y = -10;
+                            f.x = Math.random() * snowCanvas.width;
+                        }
+                        if (f.x > snowCanvas.width) f.x = 0;
+                        if (f.x < 0) f.x = snowCanvas.width;
+                    });
+                }
+                requestAnimationFrame(renderSnow);
+            }
+            renderSnow();
+
             const tagButtons = document.querySelectorAll(".tag-btn");
             const postCards = document.querySelectorAll(".post-card");
             tagButtons.forEach(btn => {
@@ -501,6 +567,7 @@
                 });
             });
 
+            const cliInput = document.getElementById("cli-input");
             const modal = document.getElementById("reader-modal");
             const articleBody = document.getElementById("article-body");
             const closeModalBtn = document.getElementById("close-modal");
@@ -508,14 +575,20 @@
             function openArticle(postId) {
                 if (articlesData[postId]) {
                     articleBody.innerHTML = articlesData[postId];
+                    articleBody.scrollTop = 0;
                     modal.style.display = "flex";
                     document.body.style.overflow = "hidden";
+                    if (document.activeElement) document.activeElement.blur();
+                    setTimeout(() => articleBody.focus(), 10);
                 }
             }
 
             function closeModal() {
-                modal.style.display = "none";
-                document.body.style.overflow = "auto";
+                if (modal.style.display === "flex") {
+                    modal.style.display = "none";
+                    document.body.style.overflow = "auto";
+                    setTimeout(() => cliInput.focus(), 10);
+                }
             }
 
             postCards.forEach(card => card.addEventListener("click", () => openArticle(card.getAttribute("data-post-id"))));
@@ -542,19 +615,41 @@
             }
 
             function closeAlgoModal() {
-                algoModal.style.display = "none";
-                document.body.style.overflow = "auto";
-                if (animId) cancelAnimationFrame(animId);
+                if (algoModal.style.display === "flex") {
+                    algoModal.style.display = "none";
+                    document.body.style.overflow = "auto";
+                    if (animId) cancelAnimationFrame(animId);
+                    setTimeout(() => cliInput.focus(), 10);
+                }
             }
 
             closeAlgoBtn.addEventListener("click", closeAlgoModal);
             algoModal.addEventListener("click", (e) => { if (e.target === algoModal) closeAlgoModal(); });
 
-            // Universal ESC Key Handler & 1,2,3 hotkeys
+            // Universal Keyboard Handler (ESC, Arrow Scrolling in Reader, 1-2-3 in Visualizer)
             document.addEventListener("keydown", (e) => {
                 if (e.key === "Escape") {
                     closeModal();
                     closeAlgoModal();
+                    return;
+                }
+
+                // Allow smooth keyboard scrolling inside open Reader Modal
+                if (modal.style.display === "flex") {
+                    if (e.key === "ArrowDown") {
+                        e.preventDefault();
+                        articleBody.scrollBy({ top: 70, behavior: "smooth" });
+                    } else if (e.key === "ArrowUp") {
+                        e.preventDefault();
+                        articleBody.scrollBy({ top: -70, behavior: "smooth" });
+                    } else if (e.key === "PageDown") {
+                        e.preventDefault();
+                        articleBody.scrollBy({ top: articleBody.clientHeight * 0.85, behavior: "smooth" });
+                    } else if (e.key === "PageUp") {
+                        e.preventDefault();
+                        articleBody.scrollBy({ top: -articleBody.clientHeight * 0.85, behavior: "smooth" });
+                    }
+                    return;
                 }
                 
                 if (algoModal.style.display === "flex") {
@@ -734,7 +829,6 @@
             }
 
             // CLI & Gemini CLI Simulation State
-            const cliInput = document.getElementById("cli-input");
             const cliOutput = document.getElementById("cli-output");
             const cliPrompt = document.getElementById("cli-prompt");
             const shellTitle = document.getElementById("shell-title");
@@ -745,7 +839,7 @@
             let isBusy = false;
 
             const commands = {
-                help: "Available commands:<br>- <span class='highlight'>npm install -g @google/gemini-cli</span>: Install Gemini CLI<br>- <span class='highlight'>gemini</span> (or <span class='highlight'>npx @google/gemini-cli</span>): Launch Gemini CLI agent<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer (Hotkeys: 1, 2, 3)<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
+                help: "Available commands:<br>- <span class='highlight'>install Gemini</span>: Install Gemini CLI<br>- <span class='highlight'>gemini</span> (or <span class='highlight'>npx @google/gemini-cli</span>): Launch Gemini CLI agent<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer (Hotkeys: 1, 2, 3)<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article<br>- <span class='highlight'>snow</span>: Toggle snowfall effect<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
                 ls: "0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)",
                 linkedin: "Redirecting to https://www.linkedin.com/in/gregor-otto-huber ..."
             };
@@ -764,7 +858,7 @@
                 }
                 isBusy = true;
                 const steps = [
-                    "npm warn deprecated inflight@1.0.6: This module is not supported",
+                    "$ npm install -g @google/gemini-cli",
                     "[NPM] Resolving packages for <span class='highlight'>@google/gemini-cli@latest</span>...",
                     "[NPM] Fetching @google/genai-core, ink-ui, mcp-client (14.2 MB)...",
                     "[NPM] Linking binary -> /usr/local/bin/gemini",
@@ -814,7 +908,7 @@
                 geminiMode = false;
                 cliPrompt.textContent = "root@nextstopcloud:~#";
                 cliPrompt.className = "prompt";
-                shellTitle.textContent = "cli_shell_v2.5.0";
+                shellTitle.textContent = "cli_shell_v2.5.1";
                 shellStatus.textContent = "STATUS: ONLINE";
                 shellStatus.style.color = "";
                 appendOutput("Session closed. Returned to standard bash shell.");
@@ -974,11 +1068,14 @@
 
                     if (lowerInput === "clear") {
                         cliOutput.innerHTML = "";
+                    } else if (lowerInput === "snow") {
+                        snowEnabled = !snowEnabled;
+                        appendOutput(`Winter snowfall effect: <span class="highlight">${snowEnabled ? "ENABLED ❄" : "DISABLED"}</span>`);
                     } else if (
+                        lowerInput === "install gemini" ||
                         lowerInput === "npm install -g @google/gemini-cli" ||
                         lowerInput === "npm i -g @google/gemini-cli" ||
-                        lowerInput === "brew install gemini-cli" ||
-                        lowerInput === "install gemini"
+                        lowerInput === "brew install gemini-cli"
                     ) {
                         installGeminiCLI(false);
                     } else if (lowerInput === "npx @google/gemini-cli") {
@@ -989,7 +1086,7 @@
                         }
                     } else if (lowerInput === "gemini") {
                         if (!geminiInstalled) {
-                            appendOutput(`bash: gemini: command not found.<br>Install it first via: <span class="highlight">npm install -g @google/gemini-cli</span> (or run directly with <span class="highlight">npx @google/gemini-cli</span>)`);
+                            appendOutput(`bash: gemini: command not found.<br>Install it first via: <span class="highlight">install Gemini</span>`);
                         } else {
                             startGeminiSession();
                         }
@@ -1017,7 +1114,7 @@
                     } else if (commands[lowerInput]) {
                         appendOutput(commands[lowerInput]);
                     } else {
-                        appendOutput(`Command not found: <span class="highlight">${input}</span>. Type 'help', 'npm install -g @google/gemini-cli', 'algo', or 'terraform plan'.`);
+                        appendOutput(`Command not found: <span class="highlight">${input}</span>. Type 'help', 'install Gemini', 'algo', or 'terraform plan'.`);
                     }
                 }
             });
