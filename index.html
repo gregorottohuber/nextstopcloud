@@ -144,7 +144,7 @@
             background-color: var(--term-green); color: var(--bg-color);
             box-shadow: 0 0 10px var(--term-green-glow);
         }
-        .posts-grid { display: flex; flex-direction: column; gap: 20px; margin-bottom: 30px; }
+        .posts-grid { display: flex; flex-direction: column; gap: 20px; margin-bottom: 35px; }
         .post-card {
             border: 1px solid var(--term-dark-green); padding: 18px;
             background-color: rgba(0, 43, 17, 0.15); cursor: pointer;
@@ -229,29 +229,13 @@
 
         <!-- 1. Interactive Terminal Shell -->
         <section class="interactive-terminal">
-            <div class="terminal-bar"><span class="terminal-title" id="shell-title">cli_shell_v2.7.0</span><span id="shell-status">STATUS: ONLINE</span></div>
-            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'install Gemini'</span> to install Gemini CLI, <span class="highlight">'christmas'</span> for Reindeer Run, <span class="highlight">'algo'</span> for Visualizer, or <span class="highlight">'help'</span>.</p></div>
+            <div class="terminal-bar"><span class="terminal-title" id="shell-title">cli_shell_v2.7.1</span><span id="shell-status">STATUS: ONLINE</span></div>
+            <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'cat 0'</span> for DZ BANK Farewell, <span class="highlight">'christmas'</span> for Reindeer Run, <span class="highlight">'install Gemini'</span>, or <span class="highlight">'help'</span>.</p></div>
             <div class="cli-input-line"><span class="prompt" id="cli-prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
         </section>
 
-        <!-- 2. Case Studies / Projects Section -->
-        <section class="case-studies-container">
-            <div class="section-title">PROJECTS_CONTRIBUTED_TO // PUBLIC_CASE_STUDIES</div>
-            <div class="case-study-card">
-                <div class="case-study-info"><div class="case-study-title">Google Cloud Workstations @ DZ BANK</div><div class="case-study-desc">Project Contribution: Modernizing developer environments with cloud-hosted workstations.</div></div>
-                <a href="https://cloud.google.com/blog/products/application-modernization/dz-bank-improves-developer-productivity-with-cloud-workstations?hl=en" target="_blank" class="ext-link-btn">[Read Blog ↗]</a>
-            </div>
-            <div class="case-study-card">
-                <div class="case-study-info"><div class="case-study-title">Google Cloud Customer Story: DZ BANK</div><div class="case-study-desc">Project Contribution: Enterprise cloud platform modernization & digital transformation architecture.</div></div>
-                <a href="https://cloud.google.com/customers/dzbank?hl=de" target="_blank" class="ext-link-btn">[Read Story ↗]</a>
-            </div>
-            <div class="case-study-card">
-                <div class="case-study-info"><div class="case-study-title">Cloud Run First Approach @ DZ BANK</div><div class="case-study-desc">Project Contribution: Architectural design for serverless modernization & cost optimization.</div></div>
-                <a href="https://cloud.google.com/blog/products/serverless/how-dz-bank-uses-a-cloud-run-first-approach-to-unlock-big-savings?hl=en" target="_blank" class="ext-link-btn">[Read Blog ↗]</a>
-            </div>
-        </section>
-
-        <!-- 3. Filter Navigation & Article List -->
+        <!-- 2. Own Blog Posts & Filter Navigation -->
+        <div class="section-title">SYSTEM_LOGS // TECHNICAL_ARTICLES &amp; NOTES</div>
         <nav class="tag-filter">
             <span class="filter-label">FILTER_TAGS:</span>
             <button class="tag-btn active" data-tag="all">[ALL]</button>
@@ -264,11 +248,11 @@
 
         <main class="posts-grid" id="posts-container">
             <article class="post-card" data-post-id="goodbye-dzbank" data-tags="dzbank">
-                <div class="post-meta"><span class="log-level" style="color: var(--xmas-red);">[EXIT_LOG] LOG_ID: 0x05</span><span class="post-date">2026-11-20</span></div>
+                <div class="post-meta"><span class="log-level" style="color: var(--xmas-red);">[EXIT_LOG] LOG_ID: 0x00</span><span class="post-date">2026-11-20</span></div>
                 <h2 class="post-title">Goodbye DZ BANK: A Retrospective on Teamwork, Cloud Transformation &amp; Shared Milestones</h2>
                 <p class="post-excerpt">Today marks the end of an extraordinary chapter. Leaving DZ BANK after years of building, scaling, and modernizing enterprise cloud platforms together—a heartfelt thank you to the engineers, architects, and colleagues who made it all possible.</p>
                 <div class="post-tags"><span class="tag">#dzbank</span> <span class="tag">#teamwork</span> <span class="tag">#platformengineering</span> <span class="tag">#thankyou</span></div>
-                <div class="click-hint">[Click to Read ↗]</div>
+                <div class="click-hint">[Click to Read or type 'cat 0' ↗]</div>
             </article>
             <article class="post-card" data-post-id="sovereign-cloud" data-tags="sovereignty azure security">
                 <div class="post-meta"><span class="log-level">[INFO] LOG_ID: 0x01</span><span class="post-date">2026-10-24</span></div>
@@ -299,6 +283,23 @@
                 <div class="click-hint">[Click to Read ↗]</div>
             </article>
         </main>
+
+        <!-- 3. Case Studies / Google Cloud Projects Section -->
+        <section class="case-studies-container">
+            <div class="section-title">PROJECTS_CONTRIBUTED_TO // PUBLIC_CASE_STUDIES</div>
+            <div class="case-study-card">
+                <div class="case-study-info"><div class="case-study-title">Google Cloud Workstations @ DZ BANK</div><div class="case-study-desc">Project Contribution: Modernizing developer environments with cloud-hosted workstations.</div></div>
+                <a href="https://cloud.google.com/blog/products/application-modernization/dz-bank-improves-developer-productivity-with-cloud-workstations?hl=en" target="_blank" class="ext-link-btn">[Read Blog ↗]</a>
+            </div>
+            <div class="case-study-card">
+                <div class="case-study-info"><div class="case-study-title">Google Cloud Customer Story: DZ BANK</div><div class="case-study-desc">Project Contribution: Enterprise cloud platform modernization &amp; digital transformation architecture.</div></div>
+                <a href="https://cloud.google.com/customers/dzbank?hl=de" target="_blank" class="ext-link-btn">[Read Story ↗]</a>
+            </div>
+            <div class="case-study-card">
+                <div class="case-study-info"><div class="case-study-title">Cloud Run First Approach @ DZ BANK</div><div class="case-study-desc">Project Contribution: Architectural design for serverless modernization &amp; cost optimization.</div></div>
+                <a href="https://cloud.google.com/blog/products/serverless/how-dz-bank-uses-a-cloud-run-first-approach-to-unlock-big-savings?hl=en" target="_blank" class="ext-link-btn">[Read Blog ↗]</a>
+            </div>
+        </section>
 
         <footer class="terminal-footer"><p>&copy; 2026 nextstopcloud.com // Gregor Otto Huber // <span class="xmas-badge">❄</span> Season's Greetings &amp; All systems nominal.</p></footer>
     </div>
@@ -1265,8 +1266,8 @@ Connection closed. See you on the next stop.</pre>
             let isBusy = false;
 
             const commands = {
-                help: "Available commands:<br>- <span class='highlight'>christmas</span> (or <span class='highlight'>dzbank</span>): Play Rudolph Runner (FRA Westend Edition) ❄<br>- <span class='highlight'>install Gemini</span>: Install Gemini CLI<br>- <span class='highlight'>gemini</span> (or <span class='highlight'>npx @google/gemini-cli</span>): Launch Gemini CLI agent<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer (Hotkeys: 1, 2, 3)<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 5</span>: Read article (<span class='highlight'>cat 5</span>: Goodbye DZ BANK)<br>- <span class='highlight'>snow</span>: Toggle snowfall effect<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
-                ls: "0x05: Goodbye DZ BANK Retrospective (cat 5)<br>0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)",
+                help: "Available commands:<br>- <span class='highlight'>cat 0</span>: Read Goodbye DZ BANK Farewell Post<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read technical articles<br>- <span class='highlight'>christmas</span> (or <span class='highlight'>dzbank</span>): Play Rudolph Runner (FRA Westend Edition) ❄<br>- <span class='highlight'>install Gemini</span>: Install Gemini CLI<br>- <span class='highlight'>gemini</span> (or <span class='highlight'>npx @google/gemini-cli</span>): Launch Gemini CLI agent<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer (Hotkeys: 1, 2, 3)<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>snow</span>: Toggle snowfall effect<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
+                ls: "0x00: Goodbye DZ BANK Retrospective (cat 0)<br>0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)",
                 linkedin: "Redirecting to https://www.linkedin.com/in/gregor-otto-huber ..."
             };
 
@@ -1334,7 +1335,7 @@ Connection closed. See you on the next stop.</pre>
                 geminiMode = false;
                 cliPrompt.textContent = "root@nextstopcloud:~#";
                 cliPrompt.className = "prompt";
-                shellTitle.textContent = "cli_shell_v2.7.0";
+                shellTitle.textContent = "cli_shell_v2.7.1";
                 shellStatus.textContent = "STATUS: ONLINE";
                 shellStatus.style.color = "";
                 appendOutput("Session closed. Returned to standard bash shell.");
@@ -1374,7 +1375,7 @@ Connection closed. See you on the next stop.</pre>
 
                     let reply = "";
                     if (lower.includes("dz") || lower.includes("bank") || lower.includes("goodbye")) {
-                        reply = "Gregor closed his chapter at DZ BANK on 2026-11-20 after years of joint cloud modernization, Google Cloud Workstations, Cloud Run, and Azure Landing Zones. Read the full retrospective via <span class='highlight'>cat 5</span>!";
+                        reply = "Gregor closed his chapter at DZ BANK on 2026-11-20 after years of joint cloud modernization, Google Cloud Workstations, Cloud Run, and Azure Landing Zones. Read the full retrospective via <span class='highlight'>cat 0</span>!";
                     } else if (lower.includes("sovereign") || lower.includes("delos") || lower.includes("bsi")) {
                         reply = "Sovereign Cloud architectures in Germany combine regional data residency (e.g., Germany West Central), Customer-Managed Keys (CMK/DKE), and hardware-level Confidential Computing (AMD SEV-SNP) to meet strict BSI IT-Grundschutz standards. Check <span class='highlight'>cat 1</span> for the full deep-dive.";
                     } else if (lower.includes("azure") || lower.includes("landing zone") || lower.includes("terraform")) {
@@ -1534,7 +1535,7 @@ Connection closed. See you on the next stop.</pre>
                         appendOutput("Mock Terminal supports: <span class='highlight'>kubectl get pods</span> (flags: <span class='highlight'>-A</span>, <span class='highlight'>--all-namespaces</span>, <span class='highlight'>-o wide</span>).");
                     } else if (lowerInput.startsWith("cat ")) {
                         const num = lowerInput.split(" ")[1];
-                        const map = {"1":"sovereign-cloud", "2":"keyvault-powerplatform", "3":"landing-zones", "4":"confidential-computing", "5":"goodbye-dzbank"};
+                        const map = {"0":"goodbye-dzbank", "1":"sovereign-cloud", "2":"keyvault-powerplatform", "3":"landing-zones", "4":"confidential-computing"};
                         if(map[num]) { openArticle(map[num]); appendOutput(`Opening article 0x0${num} ...`); }
                         else { appendOutput("Article not found."); }
                     } else if (lowerInput === "linkedin") {
@@ -1545,7 +1546,7 @@ Connection closed. See you on the next stop.</pre>
                     } else if (commands[lowerInput]) {
                         appendOutput(commands[lowerInput]);
                     } else {
-                        appendOutput(`Command not found: <span class="highlight">${input}</span>. Type 'help', 'christmas', 'cat 5', 'install Gemini', or 'algo'.`);
+                        appendOutput(`Command not found: <span class="highlight">${input}</span>. Type 'help', 'cat 0', 'christmas', 'install Gemini', or 'algo'.`);
                     }
                 }
             });
