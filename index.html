@@ -31,6 +31,7 @@
             --term-dark-green: #002b11;
             --xmas-red: #ff4d4d;
             --xmas-red-dim: rgba(255, 77, 77, 0.45);
+            --dz-orange: #ff6600;
             --gemini-blue: #4da6ff;
             --font-stack: 'Fira Code', monospace;
         }
@@ -155,7 +156,7 @@
         .post-title { color: var(--term-green); font-size: 1.15rem; font-weight: 600; }
         .post-card:hover .post-title { text-decoration: underline; text-shadow: 0 0 6px var(--term-green-glow); }
         .post-excerpt { font-size: 0.9rem; color: #a3e6be; margin: 10px 0; line-height: 1.5; }
-        .post-tags { display: flex; gap: 8px; margin-top: 10px; }
+        .post-tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
         .tag { font-size: 0.75rem; color: var(--term-green-dim); }
         .click-hint { font-size: 0.78rem; color: var(--term-green-dim); text-align: right; margin-top: 8px; }
         .interactive-terminal { border: 1px solid var(--term-green-dim); background-color: #05080c; margin-bottom: 30px; }
@@ -228,7 +229,7 @@
 
         <!-- 1. Interactive Terminal Shell -->
         <section class="interactive-terminal">
-            <div class="terminal-bar"><span class="terminal-title" id="shell-title">cli_shell_v2.6.0</span><span id="shell-status">STATUS: ONLINE</span></div>
+            <div class="terminal-bar"><span class="terminal-title" id="shell-title">cli_shell_v2.7.0</span><span id="shell-status">STATUS: ONLINE</span></div>
             <div class="terminal-body" id="cli-output"><p>Type <span class="highlight">'install Gemini'</span> to install Gemini CLI, <span class="highlight">'christmas'</span> for Reindeer Run, <span class="highlight">'algo'</span> for Visualizer, or <span class="highlight">'help'</span>.</p></div>
             <div class="cli-input-line"><span class="prompt" id="cli-prompt">root@nextstopcloud:~#</span><input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false"></div>
         </section>
@@ -254,6 +255,7 @@
         <nav class="tag-filter">
             <span class="filter-label">FILTER_TAGS:</span>
             <button class="tag-btn active" data-tag="all">[ALL]</button>
+            <button class="tag-btn" data-tag="dzbank">[#dzbank]</button>
             <button class="tag-btn" data-tag="sovereignty">[#sovereignty]</button>
             <button class="tag-btn" data-tag="azure">[#azure]</button>
             <button class="tag-btn" data-tag="powerplatform">[#powerplatform]</button>
@@ -261,9 +263,16 @@
         </nav>
 
         <main class="posts-grid" id="posts-container">
+            <article class="post-card" data-post-id="goodbye-dzbank" data-tags="dzbank">
+                <div class="post-meta"><span class="log-level" style="color: var(--xmas-red);">[EXIT_LOG] LOG_ID: 0x05</span><span class="post-date">2026-11-20</span></div>
+                <h2 class="post-title">Goodbye DZ BANK: A Retrospective on Teamwork, Cloud Transformation &amp; Shared Milestones</h2>
+                <p class="post-excerpt">Today marks the end of an extraordinary chapter. Leaving DZ BANK after years of building, scaling, and modernizing enterprise cloud platforms together—a heartfelt thank you to the engineers, architects, and colleagues who made it all possible.</p>
+                <div class="post-tags"><span class="tag">#dzbank</span> <span class="tag">#teamwork</span> <span class="tag">#platformengineering</span> <span class="tag">#thankyou</span></div>
+                <div class="click-hint">[Click to Read ↗]</div>
+            </article>
             <article class="post-card" data-post-id="sovereign-cloud" data-tags="sovereignty azure security">
                 <div class="post-meta"><span class="log-level">[INFO] LOG_ID: 0x01</span><span class="post-date">2026-10-24</span></div>
-                <h2 class="post-title">Microsoft Sovereign Cloud in Germany: Architecture, Compliance & Delos Cloud</h2>
+                <h2 class="post-title">Microsoft Sovereign Cloud in Germany: Architecture, Compliance &amp; Delos Cloud</h2>
                 <p class="post-excerpt">An analysis of Microsoft's cloud strategy for the public sector and regulated industries in Germany. Examining data residency, Confidential Computing, and the strategic role of Delos Cloud for digital sovereignty.</p>
                 <div class="post-tags"><span class="tag">#sovereignty</span> <span class="tag">#azure</span> <span class="tag">#security</span></div>
                 <div class="click-hint">[Click to Read ↗]</div>
@@ -271,13 +280,13 @@
             <article class="post-card" data-post-id="keyvault-powerplatform" data-tags="azure powerplatform security">
                 <div class="post-meta"><span class="log-level">[INFO] LOG_ID: 0x02</span><span class="post-date">2026-10-18</span></div>
                 <h2 class="post-title">Azure Key Vault Integration in Microsoft Power Platform: Enterprise Secrets Management</h2>
-                <p class="post-excerpt">Securely managing connection strings and credentials in Power Apps & Power Automate. How environment variables paired with Azure Key Vault eliminate secret sprawl in enterprise low-code environments.</p>
+                <p class="post-excerpt">Securely managing connection strings and credentials in Power Apps &amp; Power Automate. How environment variables paired with Azure Key Vault eliminate secret sprawl in enterprise low-code environments.</p>
                 <div class="post-tags"><span class="tag">#azure</span> <span class="tag">#powerplatform</span> <span class="tag">#security</span></div>
                 <div class="click-hint">[Click to Read ↗]</div>
             </article>
             <article class="post-card" data-post-id="landing-zones" data-tags="azure security">
                 <div class="post-meta"><span class="log-level">[DEBUG] LOG_ID: 0x03</span><span class="post-date">2026-10-05</span></div>
-                <h2 class="post-title">Automated Azure Landing Zones & Policy-as-Code Frameworks</h2>
+                <h2 class="post-title">Automated Azure Landing Zones &amp; Policy-as-Code Frameworks</h2>
                 <p class="post-excerpt">Managing scalable multi-subscription Azure environments using Terraform. Enforcing automated governance guardrails via Azure Policy and CI/CD pipelines.</p>
                 <div class="post-tags"><span class="tag">#azure</span> <span class="tag">#security</span></div>
                 <div class="click-hint">[Click to Read ↗]</div>
@@ -324,11 +333,11 @@
         </div>
     </div>
 
-    <!-- Christmas Reindeer Run Game Modal -->
+    <!-- Christmas Reindeer Run Game Modal (with DZ BANK Frankfurt Elements) -->
     <div class="modal-overlay" id="xmas-modal">
         <div class="modal-container">
             <div class="modal-header">
-                <span><span class="xmas-badge">❄</span> RUDOLPH_RUNNER_V1.0 // XMAS_EDITION</span>
+                <span><span class="xmas-badge">❄</span> RUDOLPH_RUNNER_V1.1 // FRA_WESTEND_EDITION</span>
                 <button class="close-btn" id="close-xmas-modal">[ESC / CLOSE]</button>
             </div>
             <div class="game-hud">
@@ -339,15 +348,43 @@
                 <canvas id="xmasCanvas" width="780" height="250"></canvas>
             </div>
             <div id="xmas-status" style="font-size: 0.85rem; color: var(--term-green-dim);">
-                Dodge the pine trees! Press SPACE or UP ARROW to leap.
+                Dodge the pine trees past the Frankfurt DZ BANK skyline! Press SPACE or UP ARROW to leap.
             </div>
         </div>
     </div>
 
     <script>
         const articlesData = {
+            "goodbye-dzbank": `
+                <h1>Goodbye DZ BANK: A Retrospective on Teamwork, Cloud Transformation &amp; Shared Milestones</h1>
+                <p><strong>Author:</strong> Gregor Otto Huber | <strong>Date:</strong> 2026-11-20</p>
+                <hr style="border-color: #002b11; margin: 15px 0 25px 0;">
+
+                <h2>End of an Era</h2>
+                <p>Today is my last active day at <strong>DZ BANK</strong>. Stepping away from a place that has been my professional home for the past several years is bittersweet—not because of the systems we built, but because of the people behind them.</p>
+                <p>When I look back at what we accomplished together, what stands out most isn't a single architecture diagram or deployment pipeline. It is the collective mindset of a team that refused to accept <em>"that's how we've always done it"</em> in one of the most heavily regulated industries in Europe.</p>
+
+                <h2>What We Built Together</h2>
+                <p>Enterprise cloud transformation in banking is never a solo effort. Every milestone we reached was the result of late-night debugging sessions, honest architectural debates, and mutual trust across teams:</p>
+                <ul>
+                    <li><strong>Modernizing Developer Experience:</strong> Together, we rolled out Google Cloud Workstations and embraced a Cloud Run-first mindset—proving that strict banking compliance and high developer velocity don't have to be opposites.</li>
+                    <li><strong>Scaling Enterprise Landing Zones:</strong> From Azure Landing Zones and network architectures to secure Power Platform integrations with Azure Key Vault, we laid foundations that allow teams to build safely and autonomously.</li>
+                    <li><strong>Winning Together:</strong> Seeing our joint efforts recognized externally—such as the Google DORA Award—was never about individual accolades. It was proof of what happens when internal engineers, architects, and external partners pull in the exact same direction.</li>
+                </ul>
+
+                <h2>Thank You</h2>
+                <p>To everyone in the Cloud Competence Center, the platform teams, the network and security specialists, and every colleague who challenged my ideas, shared a coffee, or jumped on a call when things got critical: <strong>Thank you.</strong></p>
+                <p>Thank you for your openness, your pragmatism, your humor, and for letting me be part of this journey. You didn't just build resilient cloud infrastructure; you built a culture where people genuinely support each other.</p>
+
+                <h2>Signing Off</h2>
+                <p>While my own journey now takes me toward new challenges in the cloud ecosystem, I will always root for your continued success. Keep questioning the status quo, keep building great things together, and stay as awesome as you are.</p>
+
+<pre>root@dzbank:~# logout
+Connection closed. See you on the next stop.</pre>
+            `,
+
             "sovereign-cloud": `
-                <h1>Microsoft Sovereign Cloud in Germany: Architecture, Compliance & Delos Cloud</h1>
+                <h1>Microsoft Sovereign Cloud in Germany: Architecture, Compliance &amp; Delos Cloud</h1>
                 <p><strong>Author:</strong> Gregor Otto Huber | <strong>Date:</strong> 2026-10-24</p>
                 <hr style="border-color: #002b11; margin: 15px 0 25px 0;">
                 
@@ -358,7 +395,7 @@
                 <h2>1. Pillars of Microsoft Cloud for Sovereignty</h2>
                 <p>Microsoft Cloud for Sovereignty is not a physically segregated data center, but an architectural and governance layer built on existing Azure regions (such as <em>Germany West Central</em> in Frankfurt). It rests on three key pillars:</p>
                 <ul>
-                    <li><strong>Sovereign Guardrails & Landing Zones:</strong> Specialized <em>Sovereign Landing Zone (SLZ)</em> templates automatically deploy Azure Policy initiatives. These proactively prevent data from leaving approved regions or deploying non-compliant services.</li>
+                    <li><strong>Sovereign Guardrails &amp; Landing Zones:</strong> Specialized <em>Sovereign Landing Zone (SLZ)</em> templates automatically deploy Azure Policy initiatives. These proactively prevent data from leaving approved regions or deploying non-compliant services.</li>
                     <li><strong>Transparency and Operational Control:</strong> Customers gain granular visibility into cloud operations, including Customer Lockbox (requiring explicit customer approval before Microsoft engineers access resources for support).</li>
                     <li><strong>Cryptographic Sovereignty:</strong> Utilizing <em>Double Key Encryption (DKE)</em> or <em>Customer-Managed Keys (CMK)</em>, customers retain sole ownership of decryption keys. Even if data were legally requested from the cloud provider, it remains unreadable without customer-held keys.</li>
                 </ul>
@@ -367,7 +404,7 @@
                 <p>A essential component for German federal, state, and municipal entities is <strong>Delos Cloud</strong>. As an independent German IT provider, Delos Cloud operates a fully sovereign Microsoft cloud platform tailored to the public sector.</p>
                 <ul>
                     <li><strong>Operational Sovereignty:</strong> Operations are handled exclusively by security-cleared personnel located in Germany.</li>
-                    <li><strong>BSI Compliance & Security:</strong> Designed to fulfill rigorous specifications from the Federal Office for Information Security (BSI), IT-Grundschutz, and classified information standards.</li>
+                    <li><strong>BSI Compliance &amp; Security:</strong> Designed to fulfill rigorous specifications from the Federal Office for Information Security (BSI), IT-Grundschutz, and classified information standards.</li>
                     <li><strong>Innovative Partner Model:</strong> Delos Cloud utilizes Microsoft IP and tech stack while operating as an entirely separate legal and operational entity.</li>
                 </ul>
 
@@ -376,7 +413,7 @@
                 <p>Hardware-based Trusted Execution Environments (TEEs) such as <strong>AMD SEV-SNP</strong> or <strong>Intel SGX</strong> cryptographically isolate memory pages. Neither the host OS, Azure hypervisor, nor cloud administrators can access plaintext memory contents.</p>
 
 <pre>+------------------------------------------------------------------+
-|                  Application Code & Sensitive Data               |
+|                  Application Code &amp; Sensitive Data               |
 |                   (In Cryptographically Isolated Enclave)        |
 +------------------------------------------------------------------+
                                   |
@@ -437,7 +474,7 @@
                     <li>Provide Subscription ID, Resource Group, Vault Name, and Secret Name.</li>
                 </ul>
 
-                <h2>3. Guardrails & Best Practices</h2>
+                <h2>3. Guardrails &amp; Best Practices</h2>
                 <ul>
                     <li><strong>Obfuscate Flow Logs:</strong> Enable <strong>Secure Inputs</strong> and <strong>Secure Outputs</strong> in Power Automate action settings to prevent secrets from appearing in plaintext run histories.</li>
                     <li><strong>ALM Environment Strategy:</strong> Maintain distinct Key Vaults across Dev, Test, and Prod environments. Deployment pipelines adjust binding pointers automatically without modifying application logic.</li>
@@ -449,7 +486,7 @@
             `,
 
             "landing-zones": `
-                <h1>Automated Azure Landing Zones & Policy-as-Code Frameworks</h1>
+                <h1>Automated Azure Landing Zones &amp; Policy-as-Code Frameworks</h1>
                 <p><strong>Author:</strong> Gregor Otto Huber | <strong>Date:</strong> 2026-10-05</p>
                 <hr style="border-color: #002b11; margin: 15px 0 25px 0;">
 
@@ -463,7 +500,7 @@
                     <li><strong>Tenant Root Group:</strong> Top-level global root.</li>
                     <li><strong>Platform Group:</strong> Core centralized services (Identity, Log Analytics Workspace, Microsoft Sentinel, Hub VNet, Azure Firewall).</li>
                     <li><strong>Landing Zones Group:</strong> Application workloads (Corp for internal hybrid connectivity, Online for public-facing DMZs, Confidential for sovereign workloads).</li>
-                    <li><strong>Sandbox & Decommissioned:</strong> Isolated playgrounds bound by strict spend caps.</li>
+                    <li><strong>Sandbox &amp; Decommissioned:</strong> Isolated playgrounds bound by strict spend caps.</li>
                 </ul>
 
                 <h2>2. Infrastructure as Code (IaC) with Terraform</h2>
@@ -647,7 +684,7 @@
             closeAlgoBtn.addEventListener("click", closeAlgoModal);
             algoModal.addEventListener("click", (e) => { if (e.target === algoModal) closeAlgoModal(); });
 
-            // Christmas Reindeer Runner Game Logic
+            // Christmas Reindeer Runner Game Logic (with subtle DZ BANK Frankfurt elements)
             const xmasModal = document.getElementById("xmas-modal");
             const closeXmasBtn = document.getElementById("close-xmas-modal");
             const xmasCanvas = document.getElementById("xmasCanvas");
@@ -690,7 +727,7 @@
                 reindeer.vy = 0;
                 reindeer.isJumping = false;
                 xmasScoreEl.textContent = "0000";
-                xmasStatusEl.textContent = "Running through the winter cloud forest... Press SPACE or ↑ to jump!";
+                xmasStatusEl.textContent = "Running past the DZ BANK Frankfurt skyline... Press SPACE or ↑ to jump!";
             }
 
             function jumpReindeer() {
@@ -725,6 +762,74 @@
             xmasModal.addEventListener("click", (e) => { if (e.target === xmasModal) closeXmasModal(); });
             document.getElementById("xmas-canvas-wrap").addEventListener("click", jumpReindeer);
 
+            function drawDZSkyline(ctx, floorY, offset) {
+                const cycle = 780;
+                const shift = (offset * 0.28) % cycle;
+
+                for (let rep = 0; rep < 2; rep++) {
+                    const baseX = rep * cycle - shift;
+
+                    // Westendstraße 1 (DZ BANK Tower with iconic crown)
+                    const towerX = baseX + 430;
+                    const towerW = 34;
+                    const towerH = 122;
+                    const towerTop = floorY - towerH;
+
+                    ctx.strokeStyle = "rgba(0, 179, 71, 0.28)";
+                    ctx.fillStyle = "rgba(0, 43, 17, 0.22)";
+                    ctx.lineWidth = 1;
+                    ctx.fillRect(towerX, towerTop, towerW, towerH);
+                    ctx.strokeRect(towerX, towerTop, towerW, towerH);
+
+                    // Iconic Crown / Ray structure on top of Westendstraße 1
+                    ctx.strokeStyle = "rgba(255, 102, 0, 0.45)";
+                    ctx.beginPath();
+                    ctx.moveTo(towerX - 5, towerTop);
+                    ctx.lineTo(towerX + towerW + 5, towerTop);
+                    ctx.moveTo(towerX + 4, towerTop);
+                    ctx.lineTo(towerX - 4, towerTop - 12);
+                    ctx.moveTo(towerX + 12, towerTop);
+                    ctx.lineTo(towerX + 9, towerTop - 15);
+                    ctx.moveTo(towerX + 22, towerTop);
+                    ctx.lineTo(towerX + 25, towerTop - 15);
+                    ctx.moveTo(towerX + 30, towerTop);
+                    ctx.lineTo(towerX + 38, towerTop - 12);
+                    ctx.stroke();
+
+                    // Tiny subtle "DZ" sign on tower facade
+                    ctx.fillStyle = "rgba(255, 102, 0, 0.55)";
+                    ctx.font = "bold 9px Fira Code";
+                    ctx.fillText("DZ", towerX + 11, towerTop + 16);
+
+                    // Neighboring City-Haus / Frankfurt high-rises silhouette
+                    ctx.strokeStyle = "rgba(0, 179, 71, 0.2)";
+                    ctx.strokeRect(baseX + 385, floorY - 78, 32, 78);
+                    ctx.strokeRect(baseX + 476, floorY - 65, 28, 65);
+                    ctx.strokeRect(baseX + 160, floorY - 58, 26, 58);
+                    ctx.strokeRect(baseX + 192, floorY - 82, 24, 82);
+                }
+
+                // Festive Pixel DZ BANK Badge in Top-Right Sky
+                const badgeX = 646;
+                const badgeY = 16;
+                ctx.fillStyle = "rgba(10, 14, 20, 0.85)";
+                ctx.fillRect(badgeX, badgeY, 118, 26);
+                ctx.strokeStyle = "rgba(255, 77, 77, 0.65)";
+                ctx.lineWidth = 1;
+                ctx.strokeRect(badgeX, badgeY, 118, 26);
+
+                // Orange DZ square emblem + text
+                ctx.fillStyle = "#ff6600";
+                ctx.fillRect(badgeX + 7, badgeY + 6, 14, 14);
+                ctx.fillStyle = "#0a0e14";
+                ctx.font = "bold 9px Fira Code";
+                ctx.fillText("DZ", badgeX + 8.5, badgeY + 16);
+
+                ctx.fillStyle = "#00ff66";
+                ctx.font = "bold 10px Fira Code";
+                ctx.fillText("DZ BANK ❄", badgeX + 27, badgeY + 17);
+            }
+
             function drawPineTree(ctx, x, groundY, h, w) {
                 const trunkW = Math.max(6, Math.floor(w * 0.24));
                 const trunkH = Math.max(8, Math.floor(h * 0.2));
@@ -750,10 +855,15 @@
                     ctx.fill();
                 }
 
-                // Red ornament dot on tree
+                // Christmas Red & DZ Orange ornaments on tree
                 ctx.fillStyle = "#ff4d4d";
                 ctx.beginPath();
-                ctx.arc(x + w * 0.45, groundY - h * 0.48, 2.5, 0, Math.PI * 2);
+                ctx.arc(x + w * 0.42, groundY - h * 0.45, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = "#ff6600";
+                ctx.beginPath();
+                ctx.arc(x + w * 0.58, groundY - h * 0.65, 2.2, 0, Math.PI * 2);
                 ctx.fill();
             }
 
@@ -783,7 +893,12 @@
                 ctx.fillStyle = "#00ff66";
                 ctx.fillRect(x, y + 14, 24, 12);
 
+                // Subtle DZ Orange Saddle Blanket on Reindeer
+                ctx.fillStyle = "#ff6600";
+                ctx.fillRect(x + 6, y + 14, 10, 6);
+
                 // Neck & Head
+                ctx.fillStyle = "#00ff66";
                 ctx.fillRect(x + 18, y + 5, 8, 12);
                 ctx.fillRect(x + 20, y + 4, 14, 9);
 
@@ -816,10 +931,13 @@
                     // Subtle background stars
                     xmasCtx.fillStyle = "rgba(0, 255, 102, 0.25)";
                     for (let s = 0; s < 14; s++) {
-                        const sx = (s * 67 + Math.floor(groundOffset * 0.2)) % xmasCanvas.width;
-                        const sy = 24 + (s * 19) % 85;
+                        const sx = (s * 67 + Math.floor(groundOffset * 0.15)) % xmasCanvas.width;
+                        const sy = 20 + (s * 19) % 75;
                         xmasCtx.fillRect(xmasCanvas.width - sx, sy, 2, 2);
                     }
+
+                    // Parallax Frankfurt DZ BANK Skyline & Emblem
+                    drawDZSkyline(xmasCtx, floorY, groundOffset);
 
                     // Ground line & scrolling snow dashes
                     xmasCtx.strokeStyle = "#00b347";
@@ -901,7 +1019,7 @@
 
                     // Game Over Overlay Banner
                     if (gameOver) {
-                        xmasCtx.fillStyle = "rgba(10, 14, 20, 0.82)";
+                        xmasCtx.fillStyle = "rgba(10, 14, 20, 0.85)";
                         xmasCtx.fillRect(210, 72, 360, 82);
                         xmasCtx.strokeStyle = "#ff4d4d";
                         xmasCtx.lineWidth = 1.5;
@@ -1147,8 +1265,8 @@
             let isBusy = false;
 
             const commands = {
-                help: "Available commands:<br>- <span class='highlight'>christmas</span> (or <span class='highlight'>xmas</span>): Play Reindeer Runner mini-game ❄<br>- <span class='highlight'>install Gemini</span>: Install Gemini CLI<br>- <span class='highlight'>gemini</span> (or <span class='highlight'>npx @google/gemini-cli</span>): Launch Gemini CLI agent<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer (Hotkeys: 1, 2, 3)<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 4</span>: Read article<br>- <span class='highlight'>snow</span>: Toggle snowfall effect<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
-                ls: "0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)",
+                help: "Available commands:<br>- <span class='highlight'>christmas</span> (or <span class='highlight'>dzbank</span>): Play Rudolph Runner (FRA Westend Edition) ❄<br>- <span class='highlight'>install Gemini</span>: Install Gemini CLI<br>- <span class='highlight'>gemini</span> (or <span class='highlight'>npx @google/gemini-cli</span>): Launch Gemini CLI agent<br>- <span class='highlight'>algo</span>: Open Algorithm Visualizer (Hotkeys: 1, 2, 3)<br>- <span class='highlight'>terraform plan</span> (or <span class='highlight'>tf</span>): Run IaC check<br>- <span class='highlight'>istio</span>: Run Istio mTLS demo<br>- <span class='highlight'>kubectl get pods</span>: Show running Pods<br>- <span class='highlight'>ls</span>: List all posts<br>- <span class='highlight'>cat 1</span> .. <span class='highlight'>cat 5</span>: Read article (<span class='highlight'>cat 5</span>: Goodbye DZ BANK)<br>- <span class='highlight'>snow</span>: Toggle snowfall effect<br>- <span class='highlight'>linkedin</span>: Open LinkedIn<br>- <span class='highlight'>clear</span>: Clear terminal",
+                ls: "0x05: Goodbye DZ BANK Retrospective (cat 5)<br>0x01: Sovereign Cloud (cat 1)<br>0x02: Key Vault Power Platform (cat 2)<br>0x03: Landing Zones (cat 3)<br>0x04: Confidential Computing (cat 4)",
                 linkedin: "Redirecting to https://www.linkedin.com/in/gregor-otto-huber ..."
             };
 
@@ -1216,7 +1334,7 @@
                 geminiMode = false;
                 cliPrompt.textContent = "root@nextstopcloud:~#";
                 cliPrompt.className = "prompt";
-                shellTitle.textContent = "cli_shell_v2.6.0";
+                shellTitle.textContent = "cli_shell_v2.7.0";
                 shellStatus.textContent = "STATUS: ONLINE";
                 shellStatus.style.color = "";
                 appendOutput("Session closed. Returned to standard bash shell.");
@@ -1255,7 +1373,9 @@
                     if (el) el.remove();
 
                     let reply = "";
-                    if (lower.includes("sovereign") || lower.includes("delos") || lower.includes("bsi")) {
+                    if (lower.includes("dz") || lower.includes("bank") || lower.includes("goodbye")) {
+                        reply = "Gregor closed his chapter at DZ BANK on 2026-11-20 after years of joint cloud modernization, Google Cloud Workstations, Cloud Run, and Azure Landing Zones. Read the full retrospective via <span class='highlight'>cat 5</span>!";
+                    } else if (lower.includes("sovereign") || lower.includes("delos") || lower.includes("bsi")) {
                         reply = "Sovereign Cloud architectures in Germany combine regional data residency (e.g., Germany West Central), Customer-Managed Keys (CMK/DKE), and hardware-level Confidential Computing (AMD SEV-SNP) to meet strict BSI IT-Grundschutz standards. Check <span class='highlight'>cat 1</span> for the full deep-dive.";
                     } else if (lower.includes("azure") || lower.includes("landing zone") || lower.includes("terraform")) {
                         reply = "Automated Azure Landing Zones enforce governance at scale using Management Group hierarchies and Policy-as-Code via Terraform—preventing non-compliant deployments before they happen. Check <span class='highlight'>cat 3</span> for the Terraform blueprint.";
@@ -1376,9 +1496,9 @@
 
                     if (lowerInput === "clear") {
                         cliOutput.innerHTML = "";
-                    } else if (lowerInput === "christmas" || lowerInput === "xmas" || lowerInput === "reindeer") {
+                    } else if (lowerInput === "christmas" || lowerInput === "xmas" || lowerInput === "reindeer" || lowerInput === "dzbank" || lowerInput === "dz") {
                         openXmasModal();
-                        appendOutput("Launching Rudolph Runner (Christmas Edition)... Use [SPACE] or [↑] to jump!");
+                        appendOutput("Launching Rudolph Runner (FRA Westend / DZ BANK Edition)... Use [SPACE] or [↑] to jump!");
                     } else if (lowerInput === "snow") {
                         snowEnabled = !snowEnabled;
                         appendOutput(`Winter snowfall effect: <span class="highlight">${snowEnabled ? "ENABLED ❄" : "DISABLED"}</span>`);
@@ -1414,7 +1534,7 @@
                         appendOutput("Mock Terminal supports: <span class='highlight'>kubectl get pods</span> (flags: <span class='highlight'>-A</span>, <span class='highlight'>--all-namespaces</span>, <span class='highlight'>-o wide</span>).");
                     } else if (lowerInput.startsWith("cat ")) {
                         const num = lowerInput.split(" ")[1];
-                        const map = {"1":"sovereign-cloud", "2":"keyvault-powerplatform", "3":"landing-zones", "4":"confidential-computing"};
+                        const map = {"1":"sovereign-cloud", "2":"keyvault-powerplatform", "3":"landing-zones", "4":"confidential-computing", "5":"goodbye-dzbank"};
                         if(map[num]) { openArticle(map[num]); appendOutput(`Opening article 0x0${num} ...`); }
                         else { appendOutput("Article not found."); }
                     } else if (lowerInput === "linkedin") {
@@ -1425,7 +1545,7 @@
                     } else if (commands[lowerInput]) {
                         appendOutput(commands[lowerInput]);
                     } else {
-                        appendOutput(`Command not found: <span class="highlight">${input}</span>. Type 'help', 'christmas', 'install Gemini', 'algo', or 'terraform plan'.`);
+                        appendOutput(`Command not found: <span class="highlight">${input}</span>. Type 'help', 'christmas', 'cat 5', 'install Gemini', or 'algo'.`);
                     }
                 }
             });
